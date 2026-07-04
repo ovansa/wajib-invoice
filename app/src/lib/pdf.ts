@@ -98,17 +98,30 @@ function makeColorResolver(): (color: string) => string | null {
   };
 }
 
+// Computed properties we deliberately DON'T inline. html2canvas re-lays-out
+// and re-measures text itself; feeding it these pre-computed values makes it
+// mismeasure — `letter-spacing`/`word-spacing` cause it to swallow the space
+// between words (words run together), and pinning text-run `width`/white-space
+// forces premature or wrong wrapping. Leaving them off lets html2canvas flow
+// text the way the browser does. (Table/column widths still come through via
+// the element's own width when it isn't a text run — see note below.)
+const SKIP_PROPS = new Set([
+  "letter-spacing",
+  "word-spacing",
+]);
+
 /**
- * Snapshot the *entire* computed style of every element in `source` onto the
- * matching element in `clone` as inline styles, resolving colors to sRGB.
+ * Snapshot the computed style of every element in `source` onto the matching
+ * element in `clone` as inline styles, resolving colors to sRGB.
  *
- * Why the whole style, not just colors: Tailwind v4 nests all its utility
+ * Why inline the computed style at all: Tailwind v4 nests all its utility
  * classes inside `@layer`. html2canvas re-parses stylesheets by hand and does
  * not read rules inside `@layer`, so in a production build it applies almost
  * no layout (padding/flex/grid/width/text-align) — the invoice collapses to
  * unstyled text in the top-left corner. Inlining the resolved computed style
- * makes each clone fully self-described and independent of any stylesheet
- * html2canvas can't understand, so the capture is exactly WYSIWYG.
+ * makes each clone self-described and independent of any stylesheet
+ * html2canvas can't parse, so the capture is WYSIWYG — except for the few
+ * text-metric props in SKIP_PROPS, which html2canvas must compute itself.
  */
 function inlineComputedStyles(source: HTMLElement, clone: HTMLElement) {
   const resolveColor = makeColorResolver();
@@ -121,6 +134,7 @@ function inlineComputedStyles(source: HTMLElement, clone: HTMLElement) {
     const decls: string[] = [];
     for (let j = 0; j < cs.length; j++) {
       const prop = cs[j];
+      if (SKIP_PROPS.has(prop)) continue;
       let value = cs.getPropertyValue(prop);
       if (!value) continue;
       if (COLOR_PROPS.has(prop)) {
