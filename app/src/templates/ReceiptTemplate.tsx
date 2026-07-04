@@ -7,6 +7,11 @@ import HeaderBrand, {
   HeaderSubtitle,
   resolveAlign,
 } from "./HeaderBrand";
+import {
+  notesAfterSection,
+  notesBeforeTotals,
+  notesAtBottom,
+} from "../lib/notes";
 import { PAGE_HEIGHT } from "./page";
 
 const alignItemsCls = {
@@ -22,6 +27,19 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
     const { subtotal, discount, tax, total } = computeTotals(data);
     const showSections = hasNamedSections(data);
     const headerAlign = resolveAlign(data.headerAlign, "center");
+
+    // Receipt notes are centered with a dashed rule and no label; the same
+    // markup is dropped into whichever position is selected.
+    const receiptNotes = (
+      <div
+        data-atom
+        className="border-t border-dashed border-slate-300 pt-5 text-center"
+      >
+        <div className="whitespace-pre-wrap text-[11px] leading-6 text-slate-500">
+          {data.notes}
+        </div>
+      </div>
+    );
 
     return (
       <div
@@ -133,9 +151,15 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
                       </span>
                     </div>
                   )}
+                  {notesAfterSection(data, section.id) && (
+                    <div className="mt-4">{receiptNotes}</div>
+                  )}
                 </div>
               ))}
             </div>
+
+            {/* Notes — before totals */}
+            {notesBeforeTotals(data) && <div className="py-5">{receiptNotes}</div>}
 
             {/* Totals */}
             <div data-atom className="py-5 text-[12.5px]">
@@ -164,16 +188,8 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
               </div>
             </div>
 
-            {visible.notes && data.notes.trim() && (
-              <div
-                data-atom
-                className="border-t border-dashed border-slate-300 pt-5 text-center"
-              >
-                <div className="whitespace-pre-wrap text-[11px] leading-6 text-slate-500">
-                  {data.notes}
-                </div>
-              </div>
-            )}
+            {/* Notes — bottom (after totals) */}
+            {notesAtBottom(data) && <div className="pt-5">{receiptNotes}</div>}
           </div>
         </div>
       </div>

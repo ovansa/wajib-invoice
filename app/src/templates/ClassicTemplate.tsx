@@ -8,6 +8,8 @@ import HeaderBrand, {
   resolveAlign,
 } from "./HeaderBrand";
 import SectionTableRows from "./SectionTableRows";
+import NotesContent from "./NotesContent";
+import { notesBeforeTotals, notesAtBottom } from "../lib/notes";
 import { PAGE_HEIGHT } from "./page";
 
 const alignItemsCls = {
@@ -160,6 +162,17 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </tbody>
           </table>
 
+          {/* Notes — before totals */}
+          {notesBeforeTotals(data) && (
+            <div data-atom className="mt-6 border-t border-slate-300 pt-5">
+              <NotesContent
+                notes={data.notes}
+                labelClassName="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-500"
+                bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-600"
+              />
+            </div>
+          )}
+
           {/* Totals — boxed */}
           <div
             data-atom
@@ -188,15 +201,14 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </div>
           </div>
 
-          {/* Notes */}
-          {visible.notes && data.notes.trim() && (
+          {/* Notes — bottom (after totals) */}
+          {notesAtBottom(data) && (
             <div data-atom className="mt-12 border-t border-slate-300 pt-5">
-              <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-500">
-                Notes
-              </div>
-              <div className="whitespace-pre-wrap text-[12px] leading-7 text-slate-600">
-                {data.notes}
-              </div>
+              <NotesContent
+                notes={data.notes}
+                labelClassName="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-500"
+                bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-600"
+              />
             </div>
           )}
         </div>

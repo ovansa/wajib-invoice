@@ -4,6 +4,7 @@ import type { Accent } from "../lib/accents";
 import { formatMoney } from "../lib/format";
 import { symbolForCode } from "../lib/currencies";
 import { toRows } from "./rows";
+import NotesContent from "./NotesContent";
 
 type Variant = "modern" | "minimal" | "classic" | "letterhead" | "sidebar";
 
@@ -70,6 +71,15 @@ export default function SectionTableRows({
                 <span className="ml-1 text-[13px] text-slate-800">
                   {formatMoney(row.amount, currency)}
                 </span>
+              </td>
+            </tr>
+          );
+        }
+        if (row.kind === "notes") {
+          return (
+            <tr key={row.id} data-atom>
+              <td colSpan={colSpan} className={`${padX} pt-5 pb-2`}>
+                <NotesContent notes={data.notes} />
               </td>
             </tr>
           );

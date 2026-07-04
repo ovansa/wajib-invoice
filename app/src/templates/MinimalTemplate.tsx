@@ -8,6 +8,8 @@ import HeaderBrand, {
   resolveAlign,
 } from "./HeaderBrand";
 import SectionTableRows from "./SectionTableRows";
+import NotesContent from "./NotesContent";
+import { notesBeforeTotals, notesAtBottom } from "../lib/notes";
 import { PAGE_HEIGHT } from "./page";
 
 const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
@@ -136,6 +138,17 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </tbody>
           </table>
 
+          {/* Notes — before totals */}
+          {notesBeforeTotals(data) && (
+            <div data-atom className="mt-8 pt-6">
+              <NotesContent
+                notes={data.notes}
+                labelClassName="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400"
+                bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-500"
+              />
+            </div>
+          )}
+
           {/* Totals */}
           <div data-atom className="ml-auto mt-8 w-[45%] text-[12.5px]">
             <div className="flex justify-between py-1">
@@ -163,15 +176,14 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </div>
           </div>
 
-          {/* Notes */}
-          {visible.notes && data.notes.trim() && (
+          {/* Notes — bottom (after totals) */}
+          {notesAtBottom(data) && (
             <div data-atom className="mt-14 pt-10">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                Notes
-              </div>
-              <div className="whitespace-pre-wrap text-[12px] leading-7 text-slate-500">
-                {data.notes}
-              </div>
+              <NotesContent
+                notes={data.notes}
+                labelClassName="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400"
+                bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-500"
+              />
             </div>
           )}
         </div>

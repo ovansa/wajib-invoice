@@ -1,15 +1,18 @@
 import type { InvoiceData, LineItem } from "../types";
 import { sectionSubtotal, hasNamedSections } from "../lib/totals";
+import { notesAfterSection } from "../lib/notes";
 
 export type Row =
   | { kind: "section"; id: string; title: string; pageBreakBefore: boolean }
   | { kind: "item"; id: string; item: LineItem }
-  | { kind: "subtotal"; id: string; amount: number };
+  | { kind: "subtotal"; id: string; amount: number }
+  | { kind: "notes"; id: string };
 
 /**
  * Flatten sections into a render-ready row list. When there is only a single
  * unnamed section, section-header and subtotal rows are omitted so simple
- * invoices look exactly as before.
+ * invoices look exactly as before. When the notes are positioned after a
+ * specific section, a `notes` row is inserted right after that section.
  */
 export function toRows(data: InvoiceData): Row[] {
   const showSections = hasNamedSections(data);
@@ -34,6 +37,9 @@ export function toRows(data: InvoiceData): Row[] {
         id: `sub-${section.id}`,
         amount: sectionSubtotal(section),
       });
+    }
+    if (notesAfterSection(data, section.id)) {
+      rows.push({ kind: "notes", id: `notes-${section.id}` });
     }
   });
 

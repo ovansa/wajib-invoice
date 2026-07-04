@@ -1197,6 +1197,25 @@ export default function App() {
                   value={data.notes}
                   onChange={(e) => set("notes", e.target.value)}
                 />
+                <div className="mt-3">
+                  <Select
+                    label="Notes position"
+                    value={data.notesPosition}
+                    onChange={(e) =>
+                      set("notesPosition", e.target.value as InvoiceData["notesPosition"])
+                    }
+                  >
+                    <option value="bottom">After totals (bottom)</option>
+                    <option value="beforeTotals">
+                      Before totals (under items)
+                    </option>
+                    {data.sections.map((s, i) => (
+                      <option key={s.id} value={`section:${s.id}`}>
+                        After section: {s.title.trim() || `Section ${i + 1}`}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
               </OptionalField>
             </div>
           </CollapsibleSection>

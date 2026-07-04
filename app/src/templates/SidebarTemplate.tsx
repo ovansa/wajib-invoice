@@ -4,6 +4,8 @@ import { formatMoney, formatDate } from "../lib/format";
 import { computeTotals } from "../lib/totals";
 import { symbolForCode } from "../lib/currencies";
 import SectionTableRows from "./SectionTableRows";
+import NotesContent from "./NotesContent";
+import { notesBeforeTotals, notesAtBottom } from "../lib/notes";
 import {
   HeaderSubtitle,
   resolveAlign,
@@ -88,14 +90,15 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             )}
           </div>
 
-          {visible.notes && data.notes.trim() && (
+          {/* Notes live in the sidebar for the default "bottom" position; the
+              other positions render them in the main column below. */}
+          {notesAtBottom(data) && (
             <div data-atom className="mt-10">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-70">
-                Notes
-              </div>
-              <div className="mt-1 whitespace-pre-wrap text-[11px] leading-6 opacity-80">
-                {data.notes}
-              </div>
+              <NotesContent
+                notes={data.notes}
+                labelClassName="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-70"
+                bodyClassName="mt-1 whitespace-pre-wrap text-[11px] leading-6 opacity-80"
+              />
             </div>
           )}
         </aside>
@@ -153,6 +156,17 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
               />
             </tbody>
           </table>
+
+          {/* Notes — before totals (main column) */}
+          {notesBeforeTotals(data) && (
+            <div data-atom className="mt-6 border-t border-slate-200 pt-5">
+              <NotesContent
+                notes={data.notes}
+                labelClassName="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400"
+                bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-600"
+              />
+            </div>
+          )}
 
           <div data-atom className="ml-auto mt-6 w-[70%] text-[13px]">
             <div className="flex justify-between py-1">

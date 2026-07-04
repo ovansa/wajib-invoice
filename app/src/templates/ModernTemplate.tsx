@@ -8,6 +8,8 @@ import HeaderBrand, {
   resolveAlign,
 } from "./HeaderBrand";
 import SectionTableRows from "./SectionTableRows";
+import NotesContent from "./NotesContent";
+import { notesBeforeTotals, notesAtBottom } from "../lib/notes";
 import { PAGE_HEIGHT } from "./page";
 
 const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
@@ -178,6 +180,13 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </tbody>
           </table>
 
+          {/* Notes — before totals */}
+          {notesBeforeTotals(data) && (
+            <div data-atom className="mt-8 border-t border-slate-100 pt-6">
+              <NotesContent notes={data.notes} />
+            </div>
+          )}
+
           {/* Totals */}
           <div data-atom className="ml-auto mt-7 w-[52%] text-[13px]">
             <div className="flex justify-between px-4 py-1.5">
@@ -208,15 +217,10 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </div>
           </div>
 
-          {/* Notes */}
-          {visible.notes && data.notes.trim() && (
+          {/* Notes — bottom (after totals) */}
+          {notesAtBottom(data) && (
             <div data-atom className="mt-12 border-t border-slate-100 pt-6">
-              <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
-                Notes
-              </div>
-              <div className="whitespace-pre-wrap text-[12.5px] leading-7 text-slate-600">
-                {data.notes}
-              </div>
+              <NotesContent notes={data.notes} />
             </div>
           )}
         </div>
