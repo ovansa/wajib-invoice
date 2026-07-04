@@ -156,6 +156,7 @@ const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
               <div data-atom className="mt-8 border-t border-slate-100 pt-6">
                 <NotesContent
                   notes={data.notes}
+                  align={data.notesAlign}
                   labelClassName="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em]"
                   labelStyle={{ color: accent.dark }}
                 />
@@ -194,6 +195,7 @@ const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
               <div data-atom className="mt-12 border-t border-slate-100 pt-6">
                 <NotesContent
                   notes={data.notes}
+                  align={data.notesAlign}
                   labelClassName="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em]"
                   labelStyle={{ color: accent.dark }}
                 />

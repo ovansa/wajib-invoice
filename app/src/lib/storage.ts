@@ -61,6 +61,10 @@ export function hydrate(
     // "section:<id>" from when per-section placement existed) → "bottom".
     notesPosition:
       raw.notesPosition === "beforeTotals" ? "beforeTotals" : "bottom",
+    notesAlign:
+      raw.notesAlign === "center" || raw.notesAlign === "right"
+        ? raw.notesAlign
+        : "left",
     visible: { ...initialData.visible, ...(raw.visible ?? {}) },
     watermark: { ...initialData.watermark, ...(raw.watermark ?? {}) },
     sections: resolveSections(raw),

@@ -24,12 +24,20 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
     const showSections = hasNamedSections(data);
     const headerAlign = resolveAlign(data.headerAlign, "center");
 
-    // Receipt notes are centered with a dashed rule and no label; the same
-    // markup is dropped into whichever position is selected.
+    // Receipt notes use a dashed rule and no label; alignment follows the
+    // notesAlign setting (defaulting to the receipt's centered look feel is
+    // dropped in favor of respecting the user's choice). The same markup is
+    // dropped into whichever position is selected.
+    const notesAlignCls =
+      data.notesAlign === "left"
+        ? "text-left"
+        : data.notesAlign === "right"
+          ? "text-right"
+          : "text-center";
     const receiptNotes = (
       <div
         data-atom
-        className="border-t border-dashed border-slate-300 pt-5 text-center"
+        className={`border-t border-dashed border-slate-300 pt-5 ${notesAlignCls}`}
       >
         <div className="whitespace-pre-wrap text-[11px] leading-6 text-slate-500">
           {data.notes}

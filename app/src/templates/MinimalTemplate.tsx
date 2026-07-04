@@ -143,6 +143,7 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div data-atom className="mt-8 pt-6">
               <NotesContent
                 notes={data.notes}
+                align={data.notesAlign}
                 labelClassName="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400"
                 bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-500"
               />
@@ -181,6 +182,7 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div data-atom className="mt-14 pt-10">
               <NotesContent
                 notes={data.notes}
+                align={data.notesAlign}
                 labelClassName="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400"
                 bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-500"
               />

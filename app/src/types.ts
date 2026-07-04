@@ -21,6 +21,9 @@ export type ItemSection = {
  */
 export type NotesPosition = "bottom" | "beforeTotals";
 
+/** Text alignment of the Notes block. */
+export type NotesAlign = "left" | "center" | "right";
+
 /** Fields that can be toggled on/off. When off they hide on the invoice too. */
 export type ToggleField =
   | "fromAddress"
@@ -113,5 +116,6 @@ export type InvoiceData = {
   sections: ItemSection[];
   notes: string;
   notesPosition: NotesPosition;
+  notesAlign: NotesAlign;
   visible: Visibility;
 };

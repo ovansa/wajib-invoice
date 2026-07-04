@@ -183,7 +183,7 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
           {/* Notes — before totals */}
           {notesBeforeTotals(data) && (
             <div data-atom className="mt-8 border-t border-slate-100 pt-6">
-              <NotesContent notes={data.notes} />
+              <NotesContent notes={data.notes} align={data.notesAlign} />
             </div>
           )}
 
@@ -220,7 +220,7 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
           {/* Notes — bottom (after totals) */}
           {notesAtBottom(data) && (
             <div data-atom className="mt-12 border-t border-slate-100 pt-6">
-              <NotesContent notes={data.notes} />
+              <NotesContent notes={data.notes} align={data.notesAlign} />
             </div>
           )}
         </div>

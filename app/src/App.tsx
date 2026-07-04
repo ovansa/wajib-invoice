@@ -5,6 +5,7 @@ import type {
   InvoiceData,
   InvoiceStatus,
   LineItem,
+  NotesAlign,
   ToggleField,
 } from "./types";
 import { uid, formatMoney } from "./lib/format";
@@ -106,6 +107,16 @@ const HEADER_ALIGN_OPTIONS: {
   { id: "left", label: "Left", title: "Align header left" },
   { id: "center", label: "Center", title: "Align header center" },
   { id: "right", label: "Right", title: "Align header right" },
+];
+
+const NOTES_ALIGN_OPTIONS: {
+  id: NotesAlign;
+  label: string;
+  title: string;
+}[] = [
+  { id: "left", label: "Left", title: "Align notes left" },
+  { id: "center", label: "Center", title: "Align notes center" },
+  { id: "right", label: "Right", title: "Align notes right" },
 ];
 
 function loadViewMode(): ViewMode {
@@ -1232,6 +1243,34 @@ export default function App() {
                       Before totals (under items)
                     </option>
                   </Select>
+                </div>
+                <div className="mt-3">
+                  <Label>Notes alignment</Label>
+                  <div
+                    role="group"
+                    aria-label="Notes alignment"
+                    className="inline-flex w-full items-center gap-0.5 rounded-md border border-slate-200 bg-slate-50 p-0.5"
+                  >
+                    {NOTES_ALIGN_OPTIONS.map((opt) => {
+                      const active = data.notesAlign === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => set("notesAlign", opt.id)}
+                          aria-pressed={active}
+                          title={opt.title}
+                          className={`flex flex-1 items-center justify-center rounded-[5px] px-2 py-1.5 text-xs font-medium transition-colors ${
+                            active
+                              ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200"
+                              : "text-slate-500 hover:text-slate-700"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </OptionalField>
             </div>

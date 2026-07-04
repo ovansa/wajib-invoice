@@ -96,6 +96,7 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div data-atom className="mt-10">
               <NotesContent
                 notes={data.notes}
+                align={data.notesAlign}
                 labelClassName="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-70"
                 bodyClassName="mt-1 whitespace-pre-wrap text-[11px] leading-6 opacity-80"
               />
@@ -162,6 +163,7 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div data-atom className="mt-6 border-t border-slate-200 pt-5">
               <NotesContent
                 notes={data.notes}
+                align={data.notesAlign}
                 labelClassName="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400"
                 bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-600"
               />

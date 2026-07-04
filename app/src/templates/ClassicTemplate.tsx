@@ -167,6 +167,7 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div data-atom className="mt-6 border-t border-slate-300 pt-5">
               <NotesContent
                 notes={data.notes}
+                align={data.notesAlign}
                 labelClassName="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-500"
                 bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-600"
               />
@@ -206,6 +207,7 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div data-atom className="mt-12 border-t border-slate-300 pt-5">
               <NotesContent
                 notes={data.notes}
+                align={data.notesAlign}
                 labelClassName="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-500"
                 bodyClassName="whitespace-pre-wrap text-[12px] leading-7 text-slate-600"
               />
