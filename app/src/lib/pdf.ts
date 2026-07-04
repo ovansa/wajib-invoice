@@ -42,6 +42,81 @@ function drawWatermark(
   pdf.restoreGraphicsState();
 }
 
+// Color-bearing CSS properties we inline (as sRGB) before capture. Tailwind
+// v4 emits colors as oklch()/color-mix() — and opacity modifiers like
+// bg-white/95 resolve to oklab() in getComputedStyle — which html2canvas
+// cannot parse, so it drops backgrounds/borders/colors and exports text only.
+const COLOR_PROPS = [
+  "color",
+  "background-color",
+  "border-top-color",
+  "border-right-color",
+  "border-bottom-color",
+  "border-left-color",
+  "outline-color",
+  "text-decoration-color",
+  "fill",
+  "stroke",
+] as const;
+
+/**
+ * Convert any CSS color string (oklch/oklab/color-mix/hex/named/…) into a
+ * plain `rgb()`/`rgba()` value by painting it onto a 1×1 canvas and reading
+ * the pixel back — the pixel buffer is always sRGB bytes. This is the one
+ * conversion that survives wide-gamut colors, since modern browsers otherwise
+ * keep oklch/oklab as-is in both getComputedStyle and canvas fillStyle.
+ */
+function makeColorResolver(): (color: string) => string | null {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 1;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const cache = new Map<string, string | null>();
+  return (color: string) => {
+    if (!color) return null;
+    const hit = cache.get(color);
+    if (hit !== undefined) return hit;
+    let out: string | null = null;
+    if (ctx) {
+      try {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = "#000";
+        ctx.fillStyle = color; // ignored if unparseable → stays #000
+        ctx.fillRect(0, 0, 1, 1);
+        const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+        out =
+          a === 255
+            ? `rgb(${r}, ${g}, ${b})`
+            : `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`;
+      } catch {
+        out = null;
+      }
+    }
+    cache.set(color, out);
+    return out;
+  };
+}
+
+/**
+ * Walk `source` and its clone in lockstep, writing each element's resolved
+ * sRGB colors onto the clone as inline styles. Inline styles win over class
+ * rules, so html2canvas sees plain rgb()/rgba() instead of oklch/oklab/
+ * color-mix — which is what makes template layout and colors export correctly.
+ */
+function inlineComputedColors(source: HTMLElement, clone: HTMLElement) {
+  const resolve = makeColorResolver();
+  const srcEls = [source, ...Array.from(source.querySelectorAll<HTMLElement>("*"))];
+  const cloneEls = [clone, ...Array.from(clone.querySelectorAll<HTMLElement>("*"))];
+  const n = Math.min(srcEls.length, cloneEls.length);
+  for (let i = 0; i < n; i++) {
+    const cs = getComputedStyle(srcEls[i]);
+    const style = cloneEls[i].style;
+    for (const prop of COLOR_PROPS) {
+      const resolved = resolve(cs.getPropertyValue(prop));
+      if (resolved) style.setProperty(prop, resolved);
+    }
+  }
+}
+
 /**
  * Render a DOM node to a PDF, paginating across as many A4 pages as needed.
  * Page breaks are row-aware (computed by `computePagination`), so a line item
@@ -67,6 +142,11 @@ export async function exportToPdf(
     scale: 2,
     useCORS: true,
     backgroundColor: "#ffffff",
+    onclone: (_doc, clonedNode) => {
+      // clonedNode is the clone of `node`; inline resolved colors so modern
+      // CSS color functions don't defeat html2canvas's style parser.
+      inlineComputedColors(node, clonedNode as HTMLElement);
+    },
   });
 
   const pdf = new jsPDF({ unit: "pt", format: "a4", orientation: "portrait" });
