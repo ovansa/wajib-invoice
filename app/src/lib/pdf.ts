@@ -42,11 +42,11 @@ function drawWatermark(
   pdf.restoreGraphicsState();
 }
 
-// Color-bearing CSS properties we inline (as sRGB) before capture. Tailwind
-// v4 emits colors as oklch()/color-mix() — and opacity modifiers like
-// bg-white/95 resolve to oklab() in getComputedStyle — which html2canvas
-// cannot parse, so it drops backgrounds/borders/colors and exports text only.
-const COLOR_PROPS = [
+// CSS properties whose values may contain a color function. Tailwind v4 emits
+// colors as oklch()/color-mix() (opacity modifiers like bg-white/95 resolve to
+// oklab() in getComputedStyle), none of which html2canvas can parse — it
+// throws on the first one. These get their computed value re-resolved to sRGB.
+const COLOR_PROPS = new Set([
   "color",
   "background-color",
   "border-top-color",
@@ -55,9 +55,11 @@ const COLOR_PROPS = [
   "border-left-color",
   "outline-color",
   "text-decoration-color",
+  "column-rule-color",
   "fill",
   "stroke",
-] as const;
+  "caret-color",
+]);
 
 /**
  * Convert any CSS color string (oklch/oklab/color-mix/hex/named/…) into a
@@ -97,23 +99,44 @@ function makeColorResolver(): (color: string) => string | null {
 }
 
 /**
- * Walk `source` and its clone in lockstep, writing each element's resolved
- * sRGB colors onto the clone as inline styles. Inline styles win over class
- * rules, so html2canvas sees plain rgb()/rgba() instead of oklch/oklab/
- * color-mix — which is what makes template layout and colors export correctly.
+ * Snapshot the *entire* computed style of every element in `source` onto the
+ * matching element in `clone` as inline styles, resolving colors to sRGB.
+ *
+ * Why the whole style, not just colors: Tailwind v4 nests all its utility
+ * classes inside `@layer`. html2canvas re-parses stylesheets by hand and does
+ * not read rules inside `@layer`, so in a production build it applies almost
+ * no layout (padding/flex/grid/width/text-align) — the invoice collapses to
+ * unstyled text in the top-left corner. Inlining the resolved computed style
+ * makes each clone fully self-described and independent of any stylesheet
+ * html2canvas can't understand, so the capture is exactly WYSIWYG.
  */
-function inlineComputedColors(source: HTMLElement, clone: HTMLElement) {
-  const resolve = makeColorResolver();
+function inlineComputedStyles(source: HTMLElement, clone: HTMLElement) {
+  const resolveColor = makeColorResolver();
   const srcEls = [source, ...Array.from(source.querySelectorAll<HTMLElement>("*"))];
   const cloneEls = [clone, ...Array.from(clone.querySelectorAll<HTMLElement>("*"))];
   const n = Math.min(srcEls.length, cloneEls.length);
+
   for (let i = 0; i < n; i++) {
     const cs = getComputedStyle(srcEls[i]);
-    const style = cloneEls[i].style;
-    for (const prop of COLOR_PROPS) {
-      const resolved = resolve(cs.getPropertyValue(prop));
-      if (resolved) style.setProperty(prop, resolved);
+    const decls: string[] = [];
+    for (let j = 0; j < cs.length; j++) {
+      const prop = cs[j];
+      let value = cs.getPropertyValue(prop);
+      if (!value) continue;
+      if (COLOR_PROPS.has(prop)) {
+        value = resolveColor(value) ?? value;
+      } else if (value.includes("oklch") || value.includes("oklab") || value.includes("color-mix")) {
+        // A non-color prop still carrying a color function (e.g. a shadow or
+        // gradient): best-effort resolve, else drop it so html2canvas won't
+        // choke. Dropping is safe — these are decorative.
+        const resolved = resolveColor(value);
+        if (!resolved) continue;
+        value = resolved;
+      }
+      decls.push(`${prop}:${value}`);
     }
+    // One assignment (fast) — overwrites any classes with the flattened style.
+    cloneEls[i].style.cssText = decls.join(";");
   }
 }
 
@@ -143,9 +166,10 @@ export async function exportToPdf(
     useCORS: true,
     backgroundColor: "#ffffff",
     onclone: (_doc, clonedNode) => {
-      // clonedNode is the clone of `node`; inline resolved colors so modern
-      // CSS color functions don't defeat html2canvas's style parser.
-      inlineComputedColors(node, clonedNode as HTMLElement);
+      // clonedNode is the clone of `node`; flatten every element's computed
+      // style (colors → sRGB) onto it so neither Tailwind v4's @layer nesting
+      // nor its oklch/color-mix colors can defeat html2canvas.
+      inlineComputedStyles(node, clonedNode as HTMLElement);
     },
   });
 
