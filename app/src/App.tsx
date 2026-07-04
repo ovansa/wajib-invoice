@@ -9,7 +9,6 @@ import type {
 } from "./types";
 import { uid, formatMoney } from "./lib/format";
 import { symbolForCode } from "./lib/currencies";
-import { exportToPdf } from "./lib/pdf";
 import { initialData } from "./lib/defaults";
 import {
   loadStore,
@@ -153,7 +152,6 @@ export default function App() {
   const activeId = store.activeId;
   const activeStatus = getActive(store).status;
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [downloading, setDownloading] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(loadViewMode);
   const [collapsedSections, setCollapsedSections] = useState<
     Partial<Record<SectionId, boolean>>
@@ -453,35 +451,16 @@ export default function App() {
   // Preview of what the next issue date would be (for the UI hint).
   const nextIssueDate = advanceDate(data.date, data.recurring.frequency);
 
-  const handleDownload = async () => {
-    if (!previewRef.current) return;
-    setDownloading(true);
-    try {
-      // Make sure the capture node reflects the very latest edits (the
-      // preview normally lags the form by the debounce interval).
-      flushSync(() => setPreviewData(data));
-      await exportToPdf(
-        previewRef.current,
-        `Invoice-${data.number || "draft"}.pdf`,
-        data.watermark
-      );
-    } catch (err) {
-      console.error("PDF export failed:", err);
-      alert(
-        "Sorry, the PDF could not be generated. Check the console for details."
-      );
-    } finally {
-      setDownloading(false);
-    }
-  };
-
-  // Native browser print → real, selectable, vector text paginated by the
-  // browser. We flush the latest edits into the capture copy, then temporarily
-  // hoist that copy to be a direct child of <body> and hide the app shell, so
-  // no app chrome or blank layout space leaks onto the printed pages. The tab
-  // title becomes the default "Save as PDF" filename. Everything is restored
-  // after the dialog closes (afterprint), with a timeout fallback.
-  const handlePrint = () => {
+  // Native browser print → real, selectable, VECTOR text paginated by the
+  // browser (perfect word spacing at any DPI). This is what both "Download PDF"
+  // and "Print" use: rasterizing with html2canvas produced font-kerning bugs
+  // (merged words) and mis-parsed Tailwind v4 colors/layout, so we rely on the
+  // browser's own PDF engine instead. We flush the latest edits into the
+  // capture copy, temporarily hoist it to be a direct child of <body> and hide
+  // the app shell (so no app chrome leaks onto the page), set the tab title as
+  // the default "Save as PDF" filename, then open the dialog. Everything is
+  // restored on afterprint, with a timeout fallback.
+  const printInvoice = () => {
     flushSync(() => setPreviewData(data));
 
     const wrap = previewRef.current?.closest<HTMLElement>(
@@ -521,6 +500,9 @@ export default function App() {
       setTimeout(restore, 1000);
     });
   };
+
+  const handleDownload = () => printInvoice();
+  const handlePrint = () => printInvoice();
 
   const frequencyLabel = FREQUENCIES.find(
     (f) => f.id === data.recurring.frequency
@@ -634,10 +616,10 @@ export default function App() {
             </button>
             <button
               onClick={handleDownload}
-              disabled={downloading}
-              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 disabled:opacity-60"
+              title="Opens your browser's print dialog — choose “Save as PDF” for a crisp, selectable PDF"
+              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500"
             >
-              {downloading ? "Generating…" : "Download PDF"}
+              Download PDF
             </button>
           </div>
         </div>

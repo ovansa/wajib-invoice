@@ -21,7 +21,9 @@ body,
 body {
   background-color: #f1f3f6;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  /* Note: intentionally NOT `optimizeLegibility` — it enables kerning that
+     html2canvas mismeasures, merging adjacent words in the PDF export. */
+  text-rendering: optimizeSpeed;
 }
 
 /* Hide number-input spinners for a cleaner look */
