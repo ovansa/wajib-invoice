@@ -5,26 +5,9 @@ export function notesVisible(data: InvoiceData): boolean {
   return data.visible.notes && data.notes.trim() !== "";
 }
 
-/**
- * Resolve the stored notes position to one that's valid for the current
- * sections. A "section:<id>" pointing at a section that no longer exists
- * falls back to "bottom" so notes never silently vanish.
- */
+/** Normalize the stored notes position to a known value. */
 export function resolveNotesPosition(data: InvoiceData): NotesPosition {
-  const pos = data.notesPosition ?? "bottom";
-  if (pos.startsWith("section:")) {
-    const id = pos.slice("section:".length);
-    return data.sections.some((s) => s.id === id) ? pos : "bottom";
-  }
-  return pos === "beforeTotals" ? "beforeTotals" : "bottom";
-}
-
-/** Should the notes block render immediately after the given section id? */
-export function notesAfterSection(data: InvoiceData, sectionId: string): boolean {
-  return (
-    notesVisible(data) &&
-    resolveNotesPosition(data) === `section:${sectionId}`
-  );
+  return data.notesPosition === "beforeTotals" ? "beforeTotals" : "bottom";
 }
 
 /** Should the notes block render after the items table, before the totals? */

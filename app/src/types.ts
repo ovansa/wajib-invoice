@@ -18,10 +18,8 @@ export type ItemSection = {
  * Where the Notes block renders on the invoice:
  *   "bottom"        — after the totals (default)
  *   "beforeTotals"  — after the items table, before the totals
- *   "section:<id>"  — immediately after the item section with that id
- * An unknown/stale value (e.g. a deleted section) falls back to "bottom".
  */
-export type NotesPosition = "bottom" | "beforeTotals" | `section:${string}`;
+export type NotesPosition = "bottom" | "beforeTotals";
 
 /** Fields that can be toggled on/off. When off they hide on the invoice too. */
 export type ToggleField =

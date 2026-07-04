@@ -57,6 +57,10 @@ export function hydrate(
     ...initialData,
     ...rest,
     currency: normalizeCurrency(raw.currency),
+    // Only "beforeTotals" or "bottom" are valid; anything else (incl. a legacy
+    // "section:<id>" from when per-section placement existed) → "bottom".
+    notesPosition:
+      raw.notesPosition === "beforeTotals" ? "beforeTotals" : "bottom",
     visible: { ...initialData.visible, ...(raw.visible ?? {}) },
     watermark: { ...initialData.watermark, ...(raw.watermark ?? {}) },
     sections: resolveSections(raw),

@@ -1231,11 +1231,6 @@ export default function App() {
                     <option value="beforeTotals">
                       Before totals (under items)
                     </option>
-                    {data.sections.map((s, i) => (
-                      <option key={s.id} value={`section:${s.id}`}>
-                        After section: {s.title.trim() || `Section ${i + 1}`}
-                      </option>
-                    ))}
                   </Select>
                 </div>
               </OptionalField>

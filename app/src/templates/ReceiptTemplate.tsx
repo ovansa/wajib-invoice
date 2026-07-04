@@ -7,11 +7,7 @@ import HeaderBrand, {
   HeaderSubtitle,
   resolveAlign,
 } from "./HeaderBrand";
-import {
-  notesAfterSection,
-  notesBeforeTotals,
-  notesAtBottom,
-} from "../lib/notes";
+import { notesBeforeTotals, notesAtBottom } from "../lib/notes";
 import { PAGE_HEIGHT } from "./page";
 
 const alignItemsCls = {
@@ -150,9 +146,6 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
                         {formatMoney(sectionSubtotal(section), currency)}
                       </span>
                     </div>
-                  )}
-                  {notesAfterSection(data, section.id) && (
-                    <div className="mt-4">{receiptNotes}</div>
                   )}
                 </div>
               ))}
