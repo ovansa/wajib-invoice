@@ -6,6 +6,8 @@ import { sectionSubtotal } from "../lib/totals";
 type Props = {
   section: ItemSection;
   index: number;
+  /** Total number of sections — used to disable the move-down arrow on the last. */
+  sectionCount: number;
   showSectionUI: boolean; // show title/collapse/remove when more than one section
   canRemoveSection: boolean;
   currencySymbol: string;
@@ -15,6 +17,8 @@ type Props = {
   onToggleCollapsed: (sectionId: string) => void;
   onTitleChange: (sectionId: string, title: string) => void;
   onRemoveSection: (sectionId: string) => void;
+  /** Move this section from its current index to `to` (reorder). */
+  onMoveSection: (from: number, to: number) => void;
   onUpdateItem: (sectionId: string, itemId: string, patch: Partial<LineItem>) => void;
   /** Append a row, or insert after `afterItemId` when given (Enter key). */
   onAddItem: (sectionId: string, afterItemId?: string) => void;
@@ -170,6 +174,7 @@ const ItemRow = memo(function ItemRow({
 function SectionEditor({
   section,
   index,
+  sectionCount,
   showSectionUI,
   canRemoveSection,
   currencySymbol,
@@ -179,6 +184,7 @@ function SectionEditor({
   onToggleCollapsed,
   onTitleChange,
   onRemoveSection,
+  onMoveSection,
   onUpdateItem,
   onAddItem,
   onDuplicateItem,
@@ -283,6 +289,33 @@ function SectionEditor({
               {summary}
             </span>
           )}
+          {/* Reorder this section up/down */}
+          <div className="flex shrink-0 items-center">
+            <button
+              type="button"
+              onClick={() => onMoveSection(index, index - 1)}
+              disabled={index === 0}
+              title="Move section up"
+              aria-label="Move section up"
+              className="flex h-7 w-6 items-center justify-center rounded-sm text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 disabled:opacity-30 disabled:hover:bg-transparent"
+            >
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 15l-6-6-6 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => onMoveSection(index, index + 1)}
+              disabled={index === sectionCount - 1}
+              title="Move section down"
+              aria-label="Move section down"
+              className="flex h-7 w-6 items-center justify-center rounded-sm text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 disabled:opacity-30 disabled:hover:bg-transparent"
+            >
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+          </div>
           <button
             type="button"
             onClick={() => onRemoveSection(sectionId)}

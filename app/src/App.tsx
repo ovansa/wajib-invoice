@@ -361,6 +361,26 @@ export default function App() {
     []
   );
 
+  const moveSection = useCallback(
+    (from: number, to: number) =>
+      setData((d) => {
+        if (
+          from === to ||
+          from < 0 ||
+          to < 0 ||
+          from >= d.sections.length ||
+          to >= d.sections.length
+        ) {
+          return d;
+        }
+        const sections = [...d.sections];
+        const [moved] = sections.splice(from, 1);
+        sections.splice(to, 0, moved);
+        return { ...d, sections };
+      }),
+    []
+  );
+
   const togglePageBreak = useCallback(
     (sectionId: string, value: boolean) =>
       setData((d) =>
@@ -1102,6 +1122,7 @@ export default function App() {
                   key={section.id}
                   section={section}
                   index={i}
+                  sectionCount={data.sections.length}
                   showSectionUI={data.sections.length > 1}
                   canRemoveSection={data.sections.length > 1}
                   currencySymbol={currencySymbol}
@@ -1111,6 +1132,7 @@ export default function App() {
                   onToggleCollapsed={toggleItemSection}
                   onTitleChange={updateSectionTitle}
                   onRemoveSection={removeSection}
+                  onMoveSection={moveSection}
                   onUpdateItem={updateItem}
                   onAddItem={addItem}
                   onDuplicateItem={duplicateItem}
