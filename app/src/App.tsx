@@ -515,10 +515,15 @@ export default function App() {
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-indigo-600 text-sm font-bold text-white">
-              IN
+              W
             </div>
-            <span className="text-base font-semibold tracking-tight text-slate-800">
-              Invoice Generator
+            <span className="flex items-baseline gap-2">
+              <span className="text-base font-semibold tracking-tight text-slate-800">
+                Wajib
+              </span>
+              <span className="hidden text-xs font-medium text-slate-400 sm:inline">
+                Invoice Generator
+              </span>
             </span>
             {data.recurring.enabled && (
               <span className="ml-1 rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-semibold text-indigo-600">
