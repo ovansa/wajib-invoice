@@ -37,6 +37,12 @@ export type TemplateId =
 
 export type LogoPosition = "left" | "right" | "top" | "bottom";
 
+/**
+ * Alignment of the invoice's header title/subtitle block. "auto" keeps each
+ * template's built-in alignment; the others override it.
+ */
+export type HeaderAlign = "auto" | "left" | "center" | "right";
+
 export type AccentId =
   | "indigo"
   | "emerald"
@@ -80,6 +86,8 @@ export type InvoiceData = {
   recurring: Recurring;
   watermark: Watermark;
   headerTitle: string; // e.g. "INVOICE" or a business name
+  headerSubtitle: string; // e.g. a tagline or business line, shown under the title
+  headerAlign: HeaderAlign; // alignment of the title/subtitle block
   logo: string; // data URL, or "" when none
   logoPosition: LogoPosition;
   from: string;

@@ -3,13 +3,17 @@ import type { TemplateProps } from "./index";
 import { formatMoney, formatDate } from "../lib/format";
 import { computeTotals } from "../lib/totals";
 import { symbolForCode } from "../lib/currencies";
-import HeaderBrand from "./HeaderBrand";
+import HeaderBrand, {
+  HeaderSubtitle,
+  resolveAlign,
+} from "./HeaderBrand";
 import SectionTableRows from "./SectionTableRows";
 import { PAGE_HEIGHT } from "./page";
 
 const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
   ({ data, accent }, ref) => {
     const { taxRate, discountRate, visible } = data;
+    const headerAlign = resolveAlign(data.headerAlign, "start");
     const currency = symbolForCode(data.currency);
     const { subtotal, discount, tax, total } = computeTotals(data);
 
@@ -25,11 +29,17 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <HeaderBrand
               logo={data.logo}
               position={data.logoPosition}
-              align="start"
+              align={headerAlign}
               title={
-                <h1 className="text-[26px] font-light tracking-[0.3em] text-slate-900">
-                  {data.headerTitle || "INVOICE"}
-                </h1>
+                <>
+                  <h1 className="text-[26px] font-light tracking-[0.3em] text-slate-900">
+                    {data.headerTitle || "INVOICE"}
+                  </h1>
+                  <HeaderSubtitle
+                    text={data.headerSubtitle}
+                    className="mt-1.5 text-[12.5px] tracking-wide text-slate-500"
+                  />
+                </>
               }
               subtitle={
                 <div className="mt-1 text-[12px] tracking-wide text-slate-400">

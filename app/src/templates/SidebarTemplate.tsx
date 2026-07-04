@@ -4,11 +4,17 @@ import { formatMoney, formatDate } from "../lib/format";
 import { computeTotals } from "../lib/totals";
 import { symbolForCode } from "../lib/currencies";
 import SectionTableRows from "./SectionTableRows";
+import {
+  HeaderSubtitle,
+  resolveAlign,
+  textAlignClass,
+} from "./HeaderBrand";
 import { PAGE_HEIGHT } from "./page";
 
 const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
   ({ data, accent }, ref) => {
     const { taxRate, discountRate, visible } = data;
+    const headerAlign = resolveAlign(data.headerAlign, "start");
     const currency = symbolForCode(data.currency);
     const { subtotal, discount, tax, total } = computeTotals(data);
 
@@ -96,13 +102,17 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
         {/* Main content */}
         <main className="flex flex-1 flex-col px-9 py-12">
-          <div className="mb-10">
+          <div className={`mb-10 ${textAlignClass[headerAlign]}`}>
             <h1
               className="text-[34px] font-light leading-none tracking-[0.15em]"
               style={{ color: accent.dark }}
             >
               {data.headerTitle || "INVOICE"}
             </h1>
+            <HeaderSubtitle
+              text={data.headerSubtitle}
+              className="mt-1.5 text-[13px] text-slate-500"
+            />
             <div className="mt-1.5 text-[12px] text-slate-400">
               #{data.number}
               {visible.poNumber && data.poNumber && (

@@ -3,13 +3,17 @@ import type { TemplateProps } from "./index";
 import { formatMoney, formatDate } from "../lib/format";
 import { computeTotals } from "../lib/totals";
 import { symbolForCode } from "../lib/currencies";
-import HeaderBrand from "./HeaderBrand";
+import HeaderBrand, {
+  HeaderSubtitle,
+  resolveAlign,
+} from "./HeaderBrand";
 import SectionTableRows from "./SectionTableRows";
 import { PAGE_HEIGHT } from "./page";
 
 const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
   ({ data, accent }, ref) => {
     const { taxRate, discountRate, visible } = data;
+    const headerAlign = resolveAlign(data.headerAlign, "end");
     const currency = symbolForCode(data.currency);
     const { subtotal, discount, tax, total } = computeTotals(data);
 
@@ -45,14 +49,20 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <HeaderBrand
               logo={data.logo}
               position={data.logoPosition}
-              align="end"
+              align={headerAlign}
               title={
-                <div className="text-right text-[38px] font-light leading-none tracking-[0.12em] text-slate-800">
-                  {data.headerTitle || "INVOICE"}
-                </div>
+                <>
+                  <div className="text-[38px] font-light leading-none tracking-[0.12em] text-slate-800">
+                    {data.headerTitle || "INVOICE"}
+                  </div>
+                  <HeaderSubtitle
+                    text={data.headerSubtitle}
+                    className="mt-1.5 text-[13px] text-slate-500"
+                  />
+                </>
               }
               subtitle={
-                <div className="text-right">
+                <div>
                   <div
                     className="mt-1.5 text-[12px] font-medium tracking-wide"
                     style={{ color: accent.base }}

@@ -13,6 +13,8 @@ export const initialData: InvoiceData = {
     size: 85,
   },
   headerTitle: "INVOICE",
+  headerSubtitle: "",
+  headerAlign: "auto",
   logo: "",
   logoPosition: "top",
   from: "Your Name / Company",

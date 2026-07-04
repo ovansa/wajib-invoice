@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { flushSync } from "react-dom";
-import type { InvoiceData, InvoiceStatus, LineItem, ToggleField } from "./types";
+import type {
+  HeaderAlign,
+  InvoiceData,
+  InvoiceStatus,
+  LineItem,
+  ToggleField,
+} from "./types";
 import { uid, formatMoney } from "./lib/format";
 import { symbolForCode } from "./lib/currencies";
 import { exportToPdf } from "./lib/pdf";
@@ -30,6 +36,7 @@ import PreviewFrame, { type PreviewApi } from "./components/PreviewFrame";
 import { computeTotals } from "./lib/totals";
 import {
   Input,
+  Label,
   Textarea,
   OptionalField,
   Select,
@@ -89,6 +96,17 @@ const VIEW_OPTIONS: {
   { id: "form", label: "Form", title: "Edit the form only", icon: FormIcon },
   { id: "both", label: "Both", title: "Form and preview side by side", icon: BothIcon },
   { id: "preview", label: "Preview", title: "Preview the invoice only", icon: PreviewIcon },
+];
+
+const HEADER_ALIGN_OPTIONS: {
+  id: HeaderAlign;
+  label: string;
+  title: string;
+}[] = [
+  { id: "auto", label: "Auto", title: "Use the template's default alignment" },
+  { id: "left", label: "Left", title: "Align header left" },
+  { id: "center", label: "Center", title: "Align header center" },
+  { id: "right", label: "Right", title: "Align header right" },
 ];
 
 function loadViewMode(): ViewMode {
@@ -706,6 +724,40 @@ export default function App() {
                 value={data.headerTitle}
                 onChange={(e) => set("headerTitle", e.target.value)}
               />
+              <Input
+                label="Header subtitle"
+                placeholder="e.g. a tagline or business line (optional)"
+                value={data.headerSubtitle}
+                onChange={(e) => set("headerSubtitle", e.target.value)}
+              />
+              <div>
+                <Label>Header alignment</Label>
+                <div
+                  role="group"
+                  aria-label="Header alignment"
+                  className="inline-flex w-full items-center gap-0.5 rounded-md border border-slate-200 bg-slate-50 p-0.5"
+                >
+                  {HEADER_ALIGN_OPTIONS.map((opt) => {
+                    const active = data.headerAlign === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => set("headerAlign", opt.id)}
+                        aria-pressed={active}
+                        title={opt.title}
+                        className={`flex flex-1 items-center justify-center rounded-[5px] px-2 py-1.5 text-xs font-medium transition-colors ${
+                          active
+                            ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200"
+                            : "text-slate-500 hover:text-slate-700"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
               <LogoUpload
                 value={data.logo}
                 onChange={(url) => set("logo", url)}

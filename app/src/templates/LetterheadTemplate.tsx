@@ -4,11 +4,17 @@ import { formatMoney, formatDate } from "../lib/format";
 import { computeTotals } from "../lib/totals";
 import { symbolForCode } from "../lib/currencies";
 import SectionTableRows from "./SectionTableRows";
+import {
+  HeaderSubtitle,
+  resolveAlign,
+  textAlignClass,
+} from "./HeaderBrand";
 import { PAGE_HEIGHT } from "./page";
 
 const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
   ({ data, accent }, ref) => {
     const { taxRate, discountRate, visible } = data;
+    const headerAlign = resolveAlign(data.headerAlign, "end");
     const currency = symbolForCode(data.currency);
     const { subtotal, discount, tax, total } = computeTotals(data);
 
@@ -47,10 +53,14 @@ const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
                 )}
               </div>
             </div>
-            <div className="text-right">
+            <div className={textAlignClass[headerAlign]}>
               <div className="text-[30px] font-light leading-none tracking-[0.12em]">
                 {data.headerTitle || "INVOICE"}
               </div>
+              <HeaderSubtitle
+                text={data.headerSubtitle}
+                className="mt-1 text-[13px] opacity-90"
+              />
               <div className="mt-1 text-[12px] opacity-85">#{data.number}</div>
             </div>
           </div>

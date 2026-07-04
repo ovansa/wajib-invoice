@@ -3,8 +3,17 @@ import type { TemplateProps } from "./index";
 import { formatMoney, formatDate } from "../lib/format";
 import { computeTotals, sectionSubtotal, hasNamedSections } from "../lib/totals";
 import { symbolForCode } from "../lib/currencies";
-import HeaderBrand from "./HeaderBrand";
+import HeaderBrand, {
+  HeaderSubtitle,
+  resolveAlign,
+} from "./HeaderBrand";
 import { PAGE_HEIGHT } from "./page";
+
+const alignItemsCls = {
+  start: "text-left",
+  center: "text-center",
+  end: "text-right",
+} as const;
 
 const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
   ({ data, accent }, ref) => {
@@ -12,6 +21,7 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
     const currency = symbolForCode(data.currency);
     const { subtotal, discount, tax, total } = computeTotals(data);
     const showSections = hasNamedSections(data);
+    const headerAlign = resolveAlign(data.headerAlign, "center");
 
     return (
       <div
@@ -25,19 +35,25 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             {/* Header */}
             <div
               data-atom
-              className="border-b border-dashed border-slate-300 pb-6 text-center"
+              className={`border-b border-dashed border-slate-300 pb-6 ${alignItemsCls[headerAlign]}`}
             >
               <HeaderBrand
                 logo={data.logo}
                 position={data.logoPosition}
-                align="center"
+                align={headerAlign}
                 title={
-                  <h1
-                    className="text-[22px] font-bold uppercase tracking-[0.2em]"
-                    style={{ color: accent.dark }}
-                  >
-                    {data.headerTitle || "INVOICE"}
-                  </h1>
+                  <>
+                    <h1
+                      className="text-[22px] font-bold uppercase tracking-[0.2em]"
+                      style={{ color: accent.dark }}
+                    >
+                      {data.headerTitle || "INVOICE"}
+                    </h1>
+                    <HeaderSubtitle
+                      text={data.headerSubtitle}
+                      className="mt-1 text-[12px] text-slate-500"
+                    />
+                  </>
                 }
                 subtitle={
                   <div className="mt-1 text-[11px] tracking-wide text-slate-400">
