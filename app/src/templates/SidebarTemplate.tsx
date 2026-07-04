@@ -89,7 +89,7 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
           </div>
 
           {visible.notes && data.notes.trim() && (
-            <div data-atom className="mt-auto">
+            <div data-atom className="mt-10">
               <div className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-70">
                 Notes
               </div>

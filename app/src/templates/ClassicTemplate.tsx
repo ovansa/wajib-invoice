@@ -190,7 +190,7 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
           {/* Notes */}
           {visible.notes && data.notes.trim() && (
-            <div data-atom className="mt-auto border-t border-slate-300 pt-5">
+            <div data-atom className="mt-12 border-t border-slate-300 pt-5">
               <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-500">
                 Notes
               </div>

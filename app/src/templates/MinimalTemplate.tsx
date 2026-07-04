@@ -165,7 +165,7 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
           {/* Notes */}
           {visible.notes && data.notes.trim() && (
-            <div data-atom className="mt-auto pt-10">
+            <div data-atom className="mt-14 pt-10">
               <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                 Notes
               </div>

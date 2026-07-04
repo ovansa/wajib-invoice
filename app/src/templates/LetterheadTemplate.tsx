@@ -178,7 +178,7 @@ const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
             {/* Notes */}
             {visible.notes && data.notes.trim() && (
-              <div data-atom className="mt-auto border-t border-slate-100 pt-6">
+              <div data-atom className="mt-12 border-t border-slate-100 pt-6">
                 <div
                   className="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em]"
                   style={{ color: accent.dark }}
