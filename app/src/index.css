@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* Self-hosted Poppins — bundled so it renders in the html2canvas PDF export */
+@import "@fontsource/poppins/300.css";
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: #f1f3f6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hide number-input spinners for a cleaner look */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ------------------------------------------------------------------ *
+ * Printing
+ *
+ * On screen the invoice is rendered twice: an off-screen continuous
+ * "capture" copy (full, untransformed) and the paged on-screen sheets.
+ * For printing we hide everything and bring the continuous capture copy
+ * on-screen, then let the browser paginate it natively — this yields
+ * real, selectable, vector text and crisp output at any DPI.
+ * ------------------------------------------------------------------ */
+
+/* Off-screen park for the capture copy while on screen. */
+.invoice-capture-wrap {
+  position: absolute;
+  left: -99999px;
+  top: 0;
+  width: 820px; /* PAGE_WIDTH — keep in sync with templates/page.ts */
+}
+
+@media print {
+  /* A4 with a comfortable margin the browser reserves on every sheet. */
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    background: #fff !important;
+  }
+
+  /* While printing, handlePrint() sets this flag and moves the capture node to
+     be a direct child of <body> (see App.tsx). Hide the app shell entirely so
+     it contributes no blank pages, and show the hoisted invoice. */
+  body.is-printing > #root {
+    display: none !important;
+  }
+
+  .invoice-capture-wrap {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+  }
+
+  .invoice-capture {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+  }
+
+  /* The template pins a full-A4 min-height on its root for the on-screen sheet;
+     drop it everywhere in print so a short invoice collapses to its natural
+     height (no blank trailing page). min-height is safe to zero broadly — it
+     never distorts layout, only removes the artificial floor. */
+  .invoice-capture * {
+    min-height: 0 !important;
+  }
+
+  /* The template root also caps itself at the 820px preview width. It is nested
+     two levels under the capture node (capture > measure > templateRoot); let
+     those wrappers and the root fill the printable page. Inner width-capped
+     bits (totals column, balance bar) keep their own widths. */
+  .invoice-capture > *,
+  .invoice-capture > * > * {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Never split a line item, section header/subtotal, or totals block
+     across a page boundary. */
+  .invoice-capture tr,
+  .invoice-capture thead,
+  .invoice-capture [data-atom],
+  .invoice-capture [data-item-id] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Repeat the items-table header at the top of every printed page. */
+  .invoice-capture thead {
+    display: table-header-group;
+  }
+
+  /* Honor the per-section "start on a new page" setting. */
+  .invoice-capture [data-section-break] {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  /* Make sure background colors/accents actually print. */
+  .invoice-capture *,
+  .watermark-print * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Print-only watermark: a fixed, full-page box. A fixed element is painted
+     on every printed page, giving one stamp per page for free. */
+  .watermark-print {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 50 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Off screen the print-only watermark must never show. */
+.watermark-print {
+  display: none;
+}

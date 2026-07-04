@@ -1,0 +1,56 @@
+import type { InvoiceData } from "../types";
+import { uid } from "./format";
+
+export const initialData: InvoiceData = {
+  template: "modern",
+  accent: "indigo",
+  recurring: { enabled: false, frequency: "monthly" },
+  watermark: {
+    enabled: false,
+    text: "DRAFT",
+    opacity: 12,
+    color: "slate",
+    size: 85,
+  },
+  headerTitle: "INVOICE",
+  logo: "",
+  logoPosition: "top",
+  from: "Your Name / Company",
+  fromAddress: "",
+  fromEmail: "",
+  number: "001",
+  poNumber: "",
+  date: "",
+  dueDate: "",
+  billTo: "Client Name",
+  billToAddress: "",
+  billToEmail: "",
+  currency: "USD",
+  taxRate: 0,
+  discountRate: 0,
+  sections: [
+    {
+      id: uid(),
+      title: "",
+      items: [
+        {
+          id: uid(),
+          description: "Description of service or product",
+          quantity: 1,
+          rate: 0,
+        },
+      ],
+    },
+  ],
+  notes: "",
+  visible: {
+    fromAddress: false,
+    fromEmail: false,
+    billToAddress: false,
+    billToEmail: false,
+    dueDate: false,
+    poNumber: false,
+    discount: false,
+    notes: true,
+  },
+};
