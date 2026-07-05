@@ -204,6 +204,7 @@ export default function App() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [saveState, setSaveState] = useState<'saved' | 'saving'>('saved');
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const pushRef = useRef(debouncedPush());
   const firstDataRun = useRef(true);
   // `data` is the working copy for the active invoice; edits sync into the
@@ -653,26 +654,23 @@ export default function App() {
 
   return (
     <div className='min-h-full'>
-      {/* Top bar - two tiers: brand row + action toolbar. Sticky so controls
-          stay reachable while scrolling the invoice. */}
+      {/* Top bar - single row. Sticky so controls stay reachable while
+          scrolling the invoice. */}
       <header className='sticky top-0 z-20 border-b border-slate-200 bg-white'>
-        {/* Row 1: brand + auto-save + account */}
-        <div className='mx-auto flex max-w-[1400px] items-center justify-between px-6 pt-3.5 pb-2.5'>
-          <div className='flex items-center gap-2.5'>
-            <div className='flex h-8 w-8 items-center justify-center rounded-sm bg-indigo-600 text-sm font-bold text-white'>
+        <div className='mx-auto flex h-14 max-w-[1400px] items-center justify-between gap-3 px-6'>
+          {/* Left: brand + auto-save + invoice context */}
+          <div className='flex min-w-0 items-center gap-2.5'>
+            <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-indigo-600 text-sm font-bold text-white'>
               W
             </div>
-            <span className='flex items-baseline gap-2'>
+            <span className='hidden items-baseline gap-2 sm:flex'>
               <span className='text-base font-semibold tracking-tight text-slate-800'>
                 Wajib
-              </span>
-              <span className='hidden text-xs font-medium text-slate-400 sm:inline'>
-                Invoice Generator
               </span>
             </span>
             {/* Auto-save indicator */}
             <span
-              className='ml-1 inline-flex items-center gap-1.5 text-xs font-medium text-slate-400'
+              className='hidden items-center gap-1.5 text-xs font-medium text-slate-400 md:inline-flex'
               title={
                 user
                   ? 'Saved to your account'
@@ -701,102 +699,14 @@ export default function App() {
                 </>
               )}
             </span>
-          </div>
 
-          {/* Account: signed in → avatar menu; anonymous → Sign in / Sign up */}
-          {user ? (
-            <div className='relative'>
-              <button
-                onClick={() => setAccountMenuOpen((o) => !o)}
-                title={user.email}
-                className='flex items-center gap-2 rounded-full py-1 pl-1 pr-2 text-sm transition-colors hover:bg-slate-100'
-              >
-                <span className='flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold uppercase text-indigo-700'>
-                  {(user.name || user.email).trim().charAt(0)}
-                </span>
-                <span className='hidden max-w-35 truncate font-medium text-slate-600 sm:inline'>
-                  {user.name || user.email}
-                </span>
-                <svg
-                  viewBox='0 0 24 24'
-                  className='h-4 w-4 text-slate-400'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                >
-                  <polyline points='6 9 12 15 18 9' />
-                </svg>
-              </button>
-              {accountMenuOpen && (
-                <>
-                  <div
-                    className='fixed inset-0 z-30'
-                    onClick={() => setAccountMenuOpen(false)}
-                  />
-                  <div className='absolute right-0 z-40 mt-1 w-56 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg'>
-                    <div className='border-b border-slate-100 px-3 py-2'>
-                      <div className='truncate text-sm font-medium text-slate-700'>
-                        {user.name || 'Signed in'}
-                      </div>
-                      <div className='truncate text-xs text-slate-400'>
-                        {user.email}
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setAccountMenuOpen(false);
-                        handleSignOut();
-                      }}
-                      className='flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 transition-colors hover:bg-slate-50'
-                    >
-                      <svg
-                        viewBox='0 0 24 24'
-                        className='h-4 w-4'
-                        fill='none'
-                        stroke='currentColor'
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      >
-                        <path d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' />
-                        <polyline points='16 17 21 12 16 7' />
-                        <line x1='21' y1='12' x2='9' y2='12' />
-                      </svg>
-                      Sign out
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          ) : (
-            <div className='flex items-center gap-2'>
-              <Link
-                to='/login'
-                className='rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100'
-              >
-                Sign in
-              </Link>
-              <Link
-                to='/signup'
-                title='Sync your invoices across devices'
-                className='rounded-md bg-slate-800 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-slate-700'
-              >
-                Sign up
-              </Link>
-            </div>
-          )}
-        </div>
+            <div className='ml-1 hidden h-5 w-px bg-slate-200 sm:block' />
 
-        {/* Row 2: invoice context + view + actions */}
-        <div className='mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-y-2 border-t border-slate-100 px-6 py-2.5'>
-          <div className='flex items-center gap-2'>
             {/* Saved-invoices drawer trigger */}
             <button
               onClick={() => setDrawerOpen(true)}
               title='Saved invoices'
-              className='inline-flex items-center gap-1.5 rounded-md border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50'
+              className='inline-flex shrink-0 items-center gap-1.5 rounded-md border border-slate-200 px-2.5 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50'
             >
               <svg
                 viewBox='0 0 24 24'
@@ -811,14 +721,14 @@ export default function App() {
                 <path d='M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8' />
                 <line x1='10' y1='12' x2='14' y2='12' />
               </svg>
-              Invoices
+              <span className='hidden sm:inline'>Invoices</span>
               <span className='rounded-full bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-500'>
                 {store.invoices.length}
               </span>
             </button>
             {/* Active invoice status - pick any status directly */}
             <div
-              className={`relative inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${STATUS_META[activeStatus].chip}`}
+              className={`relative hidden shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold sm:inline-flex ${STATUS_META[activeStatus].chip}`}
             >
               <span
                 className={`h-1.5 w-1.5 rounded-full ${STATUS_META[activeStatus].dot}`}
@@ -841,13 +751,14 @@ export default function App() {
               </select>
             </div>
             {data.recurring.enabled && (
-              <span className='rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-semibold text-indigo-600'>
+              <span className='hidden shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-semibold text-indigo-600 lg:inline'>
                 ↻ {frequencyLabel}
               </span>
             )}
           </div>
 
-          <div className='flex items-center gap-2'>
+          {/* Right: view + primary action + overflow + account */}
+          <div className='flex shrink-0 items-center gap-2'>
             {/* View switcher: Form / Both / Preview (large screens only) */}
             <div
               role='group'
@@ -876,39 +787,169 @@ export default function App() {
               })}
             </div>
             <button
-              onClick={handleReset}
-              title='Clear this invoice back to a blank template'
-              className='rounded-md border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50'
-            >
-              Reset
-            </button>
-            <button
-              onClick={handlePrint}
-              title='Print, or save as PDF from the print dialog'
-              className='inline-flex items-center gap-1.5 rounded-md border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50'
-            >
-              <svg
-                viewBox='0 0 24 24'
-                className='h-4 w-4'
-                fill='none'
-                stroke='currentColor'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              >
-                <path d='M6 9V2h12v7' />
-                <path d='M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2' />
-                <rect x='6' y='14' width='12' height='8' rx='1' />
-              </svg>
-              Print
-            </button>
-            <button
               onClick={handleDownload}
               title="Opens your browser's print dialog - choose “Save as PDF” for a crisp, selectable PDF"
               className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500'
             >
               Download PDF
             </button>
+
+            {/* Overflow menu: Print + Reset */}
+            <div className='relative'>
+              <button
+                onClick={() => setMoreMenuOpen((o) => !o)}
+                aria-label='More actions'
+                title='More actions'
+                className='inline-flex items-center rounded-md border border-slate-200 px-2 py-1.5 text-slate-600 transition-colors hover:bg-slate-50'
+              >
+                <svg
+                  viewBox='0 0 24 24'
+                  className='h-4 w-4'
+                  fill='currentColor'
+                >
+                  <circle cx='5' cy='12' r='1.6' />
+                  <circle cx='12' cy='12' r='1.6' />
+                  <circle cx='19' cy='12' r='1.6' />
+                </svg>
+              </button>
+              {moreMenuOpen && (
+                <>
+                  <div
+                    className='fixed inset-0 z-30'
+                    onClick={() => setMoreMenuOpen(false)}
+                  />
+                  <div className='absolute right-0 z-40 mt-1 w-44 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg'>
+                    <button
+                      onClick={() => {
+                        setMoreMenuOpen(false);
+                        handlePrint();
+                      }}
+                      className='flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 transition-colors hover:bg-slate-50'
+                    >
+                      <svg
+                        viewBox='0 0 24 24'
+                        className='h-4 w-4'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      >
+                        <path d='M6 9V2h12v7' />
+                        <path d='M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2' />
+                        <rect x='6' y='14' width='12' height='8' rx='1' />
+                      </svg>
+                      Print
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMoreMenuOpen(false);
+                        handleReset();
+                      }}
+                      className='flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 transition-colors hover:bg-slate-50'
+                    >
+                      <svg
+                        viewBox='0 0 24 24'
+                        className='h-4 w-4'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      >
+                        <path d='M3 12a9 9 0 1 0 3-6.7L3 8' />
+                        <path d='M3 3v5h5' />
+                      </svg>
+                      Reset
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className='hidden h-5 w-px bg-slate-200 sm:block' />
+
+            {/* Account: signed in → avatar menu; anonymous → Sign in / Sign up */}
+            {user ? (
+              <div className='relative'>
+                <button
+                  onClick={() => setAccountMenuOpen((o) => !o)}
+                  title={user.email}
+                  className='flex items-center gap-1.5 rounded-full p-0.5 pr-1 text-sm transition-colors hover:bg-slate-100'
+                >
+                  <span className='flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold uppercase text-indigo-700'>
+                    {(user.name || user.email).trim().charAt(0)}
+                  </span>
+                  <svg
+                    viewBox='0 0 24 24'
+                    className='h-4 w-4 text-slate-400'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  >
+                    <polyline points='6 9 12 15 18 9' />
+                  </svg>
+                </button>
+                {accountMenuOpen && (
+                  <>
+                    <div
+                      className='fixed inset-0 z-30'
+                      onClick={() => setAccountMenuOpen(false)}
+                    />
+                    <div className='absolute right-0 z-40 mt-1 w-56 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg'>
+                      <div className='border-b border-slate-100 px-3 py-2'>
+                        <div className='truncate text-sm font-medium text-slate-700'>
+                          {user.name || 'Signed in'}
+                        </div>
+                        <div className='truncate text-xs text-slate-400'>
+                          {user.email}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setAccountMenuOpen(false);
+                          handleSignOut();
+                        }}
+                        className='flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 transition-colors hover:bg-slate-50'
+                      >
+                        <svg
+                          viewBox='0 0 24 24'
+                          className='h-4 w-4'
+                          fill='none'
+                          stroke='currentColor'
+                          strokeWidth='2'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                        >
+                          <path d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' />
+                          <polyline points='16 17 21 12 16 7' />
+                          <line x1='21' y1='12' x2='9' y2='12' />
+                        </svg>
+                        Sign out
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className='flex items-center gap-2'>
+                <Link
+                  to='/login'
+                  className='hidden rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 sm:inline-block'
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to='/signup'
+                  title='Sync your invoices across devices'
+                  className='rounded-md bg-slate-800 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-slate-700'
+                >
+                  Sign up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </header>

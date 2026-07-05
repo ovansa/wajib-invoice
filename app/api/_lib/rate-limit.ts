@@ -1,5 +1,5 @@
 import type { VercelRequest } from '@vercel/node';
-import { sql } from './db';
+import { sql } from './db.js';
 
 /**
  * Postgres-backed sliding-window rate limiter for auth endpoints. Records each

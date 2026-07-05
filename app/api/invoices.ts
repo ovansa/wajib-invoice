@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-import { getSession } from './_lib/auth';
-import { sql } from './_lib/db';
+import { getSession } from './_lib/auth.js';
+import { sql } from './_lib/db.js';
 import { z } from 'zod';
 
 const invoiceSchema = z.object({

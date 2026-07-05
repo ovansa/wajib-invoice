@@ -4,11 +4,11 @@ import {
   clientIp,
   isLimited,
   recordAttempt,
-} from '../_lib/rate-limit';
-import { setSessionCookie, signSession } from '../_lib/auth';
+} from '../_lib/rate-limit.js';
+import { setSessionCookie, signSession } from '../_lib/auth.js';
 
 import bcrypt from 'bcryptjs';
-import { sql } from '../_lib/db';
+import { sql } from '../_lib/db.js';
 import { z } from 'zod';
 
 const schema = z.object({

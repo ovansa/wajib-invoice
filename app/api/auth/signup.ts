@@ -1,14 +1,14 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { sql } from "../_lib/db";
-import { signSession, setSessionCookie } from "../_lib/auth";
+import { sql } from "../_lib/db.js";
+import { signSession, setSessionCookie } from "../_lib/auth.js";
 import {
   validatePassword,
   MIN_PASSWORD_LENGTH,
   MAX_PASSWORD_LENGTH,
-} from "../_lib/password";
-import { clientIp, isLimited, recordAttempt } from "../_lib/rate-limit";
+} from "../_lib/password.js";
+import { clientIp, isLimited, recordAttempt } from "../_lib/rate-limit.js";
 
 const schema = z.object({
   email: z.string().email().max(200).transform((e) => e.trim().toLowerCase()),

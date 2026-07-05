@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSession } from "../_lib/auth";
+import { getSession } from "../_lib/auth.js";
 
 /** Return the current user (or null) so the client can render auth state. */
 export default async function handler(
