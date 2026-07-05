@@ -105,17 +105,32 @@ function Thumb({ id }: { id: TemplateId }) {
       </div>
     );
   }
-  // corporate
+  if (id === "corporate") {
+    return (
+      <div className="flex h-full flex-col gap-1 p-1.5">
+        <div className="flex justify-between">
+          <div className="h-1 w-1/3 rounded-full bg-slate-500" />
+          <div className="h-1.5 w-1/4 rounded-full bg-slate-400" />
+        </div>
+        <div className="h-0.5 w-full bg-indigo-500" />
+        <div className="mt-0.5 h-1 w-full rounded-full bg-slate-200" />
+        <div className="h-1 w-full rounded-full bg-slate-200" />
+        <div className="mt-auto h-3 w-1/2 self-end rounded-sm border border-slate-300 bg-slate-50" />
+      </div>
+    );
+  }
+  // plain (letterhead-ready) — blank reserved band up top, then content
   return (
     <div className="flex h-full flex-col gap-1 p-1.5">
-      <div className="flex justify-between">
-        <div className="h-1 w-1/3 rounded-full bg-slate-500" />
-        <div className="h-1.5 w-1/4 rounded-full bg-slate-400" />
+      {/* dashed placeholder for pre-printed letterhead */}
+      <div className="h-1/4 w-full rounded-sm border border-dashed border-slate-300" />
+      <div className="mt-1 flex justify-between">
+        <div className="h-1 w-1/4 rounded-full bg-slate-400" />
+        <div className="h-1 w-1/5 rounded-full bg-indigo-500" />
       </div>
-      <div className="h-0.5 w-full bg-indigo-500" />
       <div className="mt-0.5 h-1 w-full rounded-full bg-slate-200" />
       <div className="h-1 w-full rounded-full bg-slate-200" />
-      <div className="mt-auto h-3 w-1/2 self-end rounded-sm border border-slate-300 bg-slate-50" />
+      <div className="mt-auto h-1.5 w-1/2 self-end rounded-full bg-slate-300" />
     </div>
   );
 }

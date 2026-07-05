@@ -66,6 +66,10 @@ export function hydrate(
       raw.notesAlign === 'center' || raw.notesAlign === 'right'
         ? raw.notesAlign
         : 'left',
+    letterheadSpace:
+      typeof raw.letterheadSpace === 'number' && raw.letterheadSpace >= 0
+        ? Math.min(raw.letterheadSpace, 120)
+        : initialData.letterheadSpace,
     visible: { ...initialData.visible, ...(raw.visible ?? {}) },
     watermark: { ...initialData.watermark, ...(raw.watermark ?? {}) },
     sections: resolveSections(raw),

@@ -47,6 +47,7 @@ export const initialData: InvoiceData = {
   notes: "",
   notesPosition: "bottom",
   notesAlign: "left",
+  letterheadSpace: 45,
   visible: {
     fromAddress: false,
     fromEmail: false,

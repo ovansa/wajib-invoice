@@ -9,6 +9,7 @@ import LetterheadTemplate from "./LetterheadTemplate";
 import CompactTemplate from "./CompactTemplate";
 import BoldTemplate from "./BoldTemplate";
 import CorporateTemplate from "./CorporateTemplate";
+import PlainTemplate from "./PlainTemplate";
 
 export type { TemplateId };
 
@@ -81,6 +82,12 @@ export const templates: TemplateMeta[] = [
     name: "Corporate",
     description: "Formal, boxed totals",
     Component: CorporateTemplate,
+  },
+  {
+    id: "plain",
+    name: "Letterhead-ready",
+    description: "No header, for pre-printed paper",
+    Component: PlainTemplate,
   },
 ];
 

@@ -46,7 +46,8 @@ export type TemplateId =
   | 'letterhead'
   | 'compact'
   | 'bold'
-  | 'corporate';
+  | 'corporate'
+  | 'plain';
 
 export type LogoPosition = 'left' | 'right' | 'top' | 'bottom';
 
@@ -121,4 +122,7 @@ export type InvoiceData = {
   notesPosition: NotesPosition;
   notesAlign: NotesAlign;
   visible: Visibility;
+  /** Reserved blank space (mm) at the top of the Letterhead-ready template,
+      so content clears pre-printed letterhead artwork. */
+  letterheadSpace: number;
 };

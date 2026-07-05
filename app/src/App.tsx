@@ -1017,6 +1017,34 @@ export default function App() {
                 ))}
               </div>
             </div>
+
+            {/* Letterhead-ready: reserve blank space at the top of the page for
+                pre-printed letterhead artwork. */}
+            {data.template === 'plain' && (
+              <div className='mt-5'>
+                <div className='mb-1 flex items-center justify-between text-[11px] font-medium uppercase tracking-wide text-slate-400'>
+                  <span>Top space for letterhead</span>
+                  <span className='tabular-nums text-slate-500'>
+                    {data.letterheadSpace} mm
+                  </span>
+                </div>
+                <input
+                  type='range'
+                  min={0}
+                  max={120}
+                  step={5}
+                  value={data.letterheadSpace}
+                  onChange={(e) =>
+                    set('letterheadSpace', Number(e.target.value))
+                  }
+                  className='w-full accent-indigo-600'
+                />
+                <p className='mt-1 text-[11px] leading-snug text-slate-400'>
+                  Blank space reserved at the top so the invoice clears your
+                  pre-printed letterhead.
+                </p>
+              </div>
+            )}
           </CollapsibleSection>
 
           <div className='my-6 h-px bg-slate-100' />
