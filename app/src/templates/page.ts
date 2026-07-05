@@ -6,5 +6,5 @@
  * page, while a long one grows past it (and paginates on export).
  */
 export const A4_RATIO = 1.4142; // height / width for A4 portrait
-export const PAGE_WIDTH = 820; // px — matches templates' max-width
+export const PAGE_WIDTH = 820; // px - matches templates' max-width
 export const PAGE_HEIGHT = Math.round(PAGE_WIDTH * A4_RATIO); // ≈ 1160px

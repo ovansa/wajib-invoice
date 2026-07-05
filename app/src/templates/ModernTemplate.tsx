@@ -1,49 +1,50 @@
-import { forwardRef } from "react";
-import type { TemplateProps } from "./index";
-import { formatMoney, formatDate } from "../lib/format";
-import { computeTotals } from "../lib/totals";
-import { symbolForCode } from "../lib/currencies";
-import HeaderBrand, {
-  HeaderSubtitle,
-  resolveAlign,
-} from "./HeaderBrand";
-import SectionTableRows from "./SectionTableRows";
-import NotesContent from "./NotesContent";
-import { notesBeforeTotals, notesAtBottom } from "../lib/notes";
-import { PAGE_HEIGHT } from "./page";
+import HeaderBrand, { HeaderSubtitle, resolveAlign } from './HeaderBrand';
+import { formatDate, formatMoney } from '../lib/format';
+import { notesAtBottom, notesBeforeTotals } from '../lib/notes';
+
+import NotesContent from './NotesContent';
+import { PAGE_HEIGHT } from './page';
+import SectionTableRows from './SectionTableRows';
+import type { TemplateProps } from './index';
+import { computeTotals } from '../lib/totals';
+import { forwardRef } from 'react';
+import { symbolForCode } from '../lib/currencies';
 
 const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
   ({ data, accent }, ref) => {
     const { taxRate, discountRate, visible } = data;
-    const headerAlign = resolveAlign(data.headerAlign, "end");
+    const headerAlign = resolveAlign(data.headerAlign, 'end');
     const currency = symbolForCode(data.currency);
     const { subtotal, discount, tax, total } = computeTotals(data);
 
     return (
       <div
         ref={ref}
-        className="mx-auto w-full max-w-[820px] bg-white text-[13px] text-slate-700"
+        className='mx-auto w-full max-w-[820px] bg-white text-[13px] text-slate-700'
         style={{ minHeight: PAGE_HEIGHT }}
       >
-        <div className="h-1.5 w-full" style={{ backgroundColor: accent.base }} />
+        <div
+          className='h-1.5 w-full'
+          style={{ backgroundColor: accent.base }}
+        />
 
-        <div className="flex h-full flex-col px-16 pb-16 pt-12">
+        <div className='flex h-full flex-col px-16 pb-16 pt-12'>
           {/* Header */}
-          <div className="mb-12 flex items-start justify-between gap-8">
-            <div className="min-w-0 flex-1 pt-1">
-              <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+          <div className='mb-12 flex items-start justify-between gap-8'>
+            <div className='min-w-0 flex-1 pt-1'>
+              <div className='text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400'>
                 From
               </div>
-              <div className="mt-1 wrap-break-word text-[17px] font-semibold text-slate-900">
-                {data.from || " "}
+              <div className='mt-1 wrap-break-word text-[17px] font-semibold text-slate-900'>
+                {data.from || ' '}
               </div>
               {visible.fromEmail && data.fromEmail && (
-                <div className="mt-0.5 wrap-break-word text-[12.5px] text-slate-500">
+                <div className='mt-0.5 wrap-break-word text-[12.5px] text-slate-500'>
                   {data.fromEmail}
                 </div>
               )}
               {visible.fromAddress && data.fromAddress && (
-                <div className="mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500">
+                <div className='mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500'>
                   {data.fromAddress}
                 </div>
               )}
@@ -54,25 +55,25 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
               align={headerAlign}
               title={
                 <>
-                  <div className="text-[38px] font-light leading-none tracking-[0.12em] text-slate-800">
-                    {data.headerTitle || "INVOICE"}
+                  <div className='text-[38px] font-light leading-none tracking-[0.12em] text-slate-800'>
+                    {data.headerTitle || 'INVOICE'}
                   </div>
                   <HeaderSubtitle
                     text={data.headerSubtitle}
-                    className="mt-1.5 text-[13px] text-slate-500"
+                    className='mt-1.5 text-[13px] text-slate-500'
                   />
                 </>
               }
               subtitle={
                 <div>
                   <div
-                    className="mt-1.5 text-[12px] font-medium tracking-wide"
+                    className='mt-1.5 text-[12px] font-medium tracking-wide'
                     style={{ color: accent.base }}
                   >
                     #{data.number}
                   </div>
                   {visible.poNumber && data.poNumber && (
-                    <div className="mt-0.5 text-[11.5px] text-slate-400">
+                    <div className='mt-0.5 text-[11.5px] text-slate-400'>
                       PO / Ref: {data.poNumber}
                     </div>
                   )}
@@ -82,38 +83,38 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
           </div>
 
           {/* Meta */}
-          <div className="mb-6 flex items-start justify-between gap-8">
-            <div className="min-w-0 flex-1">
-              <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
+          <div className='mb-6 flex items-start justify-between gap-8'>
+            <div className='min-w-0 flex-1'>
+              <div className='text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400'>
                 Bill To
               </div>
-              <div className="mt-1 wrap-break-word text-[15px] font-semibold text-slate-900">
+              <div className='mt-1 wrap-break-word text-[15px] font-semibold text-slate-900'>
                 {data.billTo}
               </div>
               {visible.billToEmail && data.billToEmail && (
-                <div className="mt-0.5 wrap-break-word text-[12.5px] text-slate-500">
+                <div className='mt-0.5 wrap-break-word text-[12.5px] text-slate-500'>
                   {data.billToEmail}
                 </div>
               )}
               {visible.billToAddress && data.billToAddress && (
-                <div className="mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500">
+                <div className='mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500'>
                   {data.billToAddress}
                 </div>
               )}
             </div>
-            <div className="shrink-0 text-right">
-              <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
+            <div className='shrink-0 text-right'>
+              <div className='text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400'>
                 Date
               </div>
-              <div className="mt-1 text-[14px] font-medium text-slate-800">
+              <div className='mt-1 text-[14px] font-medium text-slate-800'>
                 {formatDate(data.date)}
               </div>
               {visible.dueDate && data.dueDate && (
                 <>
-                  <div className="mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                  <div className='mt-2 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400'>
                     Due Date
                   </div>
-                  <div className="mt-1 text-[14px] font-medium text-slate-800">
+                  <div className='mt-1 text-[14px] font-medium text-slate-800'>
                     {formatDate(data.dueDate)}
                   </div>
                 </>
@@ -124,17 +125,17 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
           {/* Balance due */}
           <div
             data-atom
-            className="mb-9 flex items-center justify-between rounded-sm px-5 py-3.5"
+            className='mb-9 flex items-center justify-between rounded-sm px-5 py-3.5'
             style={{ backgroundColor: accent.soft }}
           >
             <span
-              className="text-[13px] font-semibold uppercase tracking-wide"
+              className='text-[13px] font-semibold uppercase tracking-wide'
               style={{ color: accent.onSoft }}
             >
               Balance Due
             </span>
             <span
-              className="text-[18px] font-bold"
+              className='text-[18px] font-bold'
               style={{ color: accent.onSoft }}
             >
               {formatMoney(total, currency)}
@@ -142,15 +143,15 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
           </div>
 
           {/* Items */}
-          <table className="w-full border-collapse">
+          <table className='w-full border-collapse'>
             <thead>
-              <tr className="bg-slate-800 text-[11px] font-medium uppercase tracking-wide text-white">
-                <th className="rounded-l-sm px-4 py-3 text-left font-medium">
+              <tr className='bg-slate-800 text-[11px] font-medium uppercase tracking-wide text-white'>
+                <th className='rounded-l-sm px-4 py-3 text-left font-medium'>
                   Item
                 </th>
-                <th className="px-4 py-3 text-right font-medium">Qty</th>
-                <th className="px-4 py-3 text-right font-medium">Rate</th>
-                <th className="rounded-r-sm px-4 py-3 text-right font-medium">
+                <th className='px-4 py-3 text-right font-medium'>Qty</th>
+                <th className='px-4 py-3 text-right font-medium'>Rate</th>
+                <th className='rounded-r-sm px-4 py-3 text-right font-medium'>
                   Amount
                 </th>
               </tr>
@@ -161,17 +162,20 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
                 accent={accent}
                 colSpan={4}
                 renderItem={(it) => (
-                  <tr key={it.id} className="border-b border-slate-100 align-top">
-                    <td className="px-4 py-3.5 text-left font-semibold text-slate-900">
+                  <tr
+                    key={it.id}
+                    className='border-b border-slate-100 align-top'
+                  >
+                    <td className='px-4 py-3.5 text-left font-semibold text-slate-900'>
                       {it.description}
                     </td>
-                    <td className="px-4 py-3.5 text-right text-slate-600">
+                    <td className='px-4 py-3.5 text-right text-slate-600'>
                       {it.quantity}
                     </td>
-                    <td className="px-4 py-3.5 text-right text-slate-600">
+                    <td className='px-4 py-3.5 text-right text-slate-600'>
                       {formatMoney(it.rate, currency)}
                     </td>
-                    <td className="px-4 py-3.5 text-right font-medium text-slate-900">
+                    <td className='px-4 py-3.5 text-right font-medium text-slate-900'>
                       {formatMoney(it.quantity * it.rate, currency)}
                     </td>
                   </tr>
@@ -180,54 +184,54 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             </tbody>
           </table>
 
-          {/* Notes — before totals */}
+          {/* Notes - before totals */}
           {notesBeforeTotals(data) && (
-            <div data-atom className="mt-8 border-t border-slate-100 pt-6">
+            <div data-atom className='mt-8 border-t border-slate-100 pt-6'>
               <NotesContent notes={data.notes} align={data.notesAlign} />
             </div>
           )}
 
           {/* Totals */}
-          <div data-atom className="ml-auto mt-7 w-[52%] text-[13px]">
-            <div className="flex justify-between px-4 py-1.5">
-              <span className="text-slate-400">Subtotal</span>
-              <span className="text-slate-700">
+          <div data-atom className='ml-auto mt-7 w-[52%] text-[13px]'>
+            <div className='flex justify-between px-4 py-1.5'>
+              <span className='text-slate-400'>Subtotal</span>
+              <span className='text-slate-700'>
                 {formatMoney(subtotal, currency)}
               </span>
             </div>
             {visible.discount && (
-              <div className="flex justify-between px-4 py-1.5">
-                <span className="text-slate-400">
+              <div className='flex justify-between px-4 py-1.5'>
+                <span className='text-slate-400'>
                   Discount ({discountRate}%)
                 </span>
-                <span className="text-slate-700">
+                <span className='text-slate-700'>
                   −{formatMoney(discount, currency)}
                 </span>
               </div>
             )}
-            <div className="flex justify-between px-4 py-1.5">
-              <span className="text-slate-400">Tax ({taxRate}%)</span>
-              <span className="text-slate-700">
+            <div className='flex justify-between px-4 py-1.5'>
+              <span className='text-slate-400'>Tax ({taxRate}%)</span>
+              <span className='text-slate-700'>
                 {formatMoney(tax, currency)}
               </span>
             </div>
-            <div className="mt-1.5 flex justify-between border-t-2 border-slate-800 px-4 pt-2.5 text-[15px] font-bold text-slate-900">
+            <div className='mt-1.5 flex justify-between border-t-2 border-slate-800 px-4 pt-2.5 text-[15px] font-bold text-slate-900'>
               <span>Total</span>
               <span>{formatMoney(total, currency)}</span>
             </div>
           </div>
 
-          {/* Notes — bottom (after totals) */}
+          {/* Notes - bottom (after totals) */}
           {notesAtBottom(data) && (
-            <div data-atom className="mt-12 border-t border-slate-100 pt-6">
+            <div data-atom className='mt-12 border-t border-slate-100 pt-6'>
               <NotesContent notes={data.notes} align={data.notesAlign} />
             </div>
           )}
         </div>
       </div>
     );
-  }
+  },
 );
 
-ModernTemplate.displayName = "ModernTemplate";
+ModernTemplate.displayName = 'ModernTemplate';
 export default ModernTemplate;

@@ -1,11 +1,11 @@
-import { PAGE_HEIGHT } from "./page";
+import { PAGE_HEIGHT } from './page';
 
 /**
  * Row-aware pagination shared by the on-screen preview and the PDF export.
  *
  * The rendered invoice is one continuous column of content. We measure the
- * "atomic" blocks inside it — table rows plus anything tagged `data-atom`
- * (totals, notes, receipt lines) — and choose page cut points that fall
+ * "atomic" blocks inside it - table rows plus anything tagged `data-atom`
+ * (totals, notes, receipt lines) - and choose page cut points that fall
  * *between* atoms, so no row is ever sliced in half.
  *
  * Multi-page invoices also get per-page chrome, which the cut points must
@@ -64,9 +64,9 @@ export function computePagination(container: HTMLElement): Pagination {
 
   const totalHeight = container.offsetHeight;
 
-  // The items table header (first table only — templates render one table).
-  const theadEl = container.querySelector("thead");
-  const tableEl = theadEl?.closest("table") ?? null;
+  // The items table header (first table only - templates render one table).
+  const theadEl = container.querySelector('thead');
+  const tableEl = theadEl?.closest('table') ?? null;
   const theadRect = theadEl ? rel(theadEl) : null;
   const tableRect = tableEl ? rel(tableEl) : null;
   const thead: TheadBand | null = theadRect
@@ -79,7 +79,7 @@ export function computePagination(container: HTMLElement): Pagination {
   // Sections explicitly marked "start on a new page": the top offset of each
   // becomes a forced cut point. (Only meaningful past the first section.)
   const forcedBreaks = Array.from(
-    container.querySelectorAll<HTMLElement>("[data-section-break]")
+    container.querySelectorAll<HTMLElement>('[data-section-break]'),
   )
     .map((el) => rel(el).top)
     .filter((top) => top > MIN_PAGE_FILL)
@@ -96,7 +96,7 @@ export function computePagination(container: HTMLElement): Pagination {
 
   // Atoms: table rows plus explicitly tagged blocks, sorted by top.
   const atoms: Rect[] = Array.from(
-    container.querySelectorAll<HTMLElement>("tbody tr, [data-atom]")
+    container.querySelectorAll<HTMLElement>('tbody tr, [data-atom]'),
   )
     .map(rel)
     .sort((a, b) => a.top - b.top);
@@ -123,7 +123,9 @@ export function computePagination(container: HTMLElement): Pagination {
     const limit = cursor + usable;
 
     // A forced (section) break inside this page's span ends the page early.
-    const forced = forcedBreaks.find((b) => b > cursor + EPS && b <= limit + EPS);
+    const forced = forcedBreaks.find(
+      (b) => b > cursor + EPS && b <= limit + EPS,
+    );
 
     if (forced === undefined && totalHeight - cursor <= usable + EPS) {
       pages.push({ start: cursor, end: totalHeight, head, topPad });
@@ -142,7 +144,7 @@ export function computePagination(container: HTMLElement): Pagination {
         }
       }
       // An atom taller than the page (or starting at the page top) can't be
-      // pushed — fall back to a hard cut so we always make progress.
+      // pushed - fall back to a hard cut so we always make progress.
       if (cut <= cursor + MIN_PAGE_FILL) cut = limit;
     }
 

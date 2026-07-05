@@ -16,55 +16,63 @@ export type ItemSection = {
 
 /**
  * Where the Notes block renders on the invoice:
- *   "bottom"        — after the totals (default)
- *   "beforeTotals"  — after the items table, before the totals
+ *   "bottom"        - after the totals (default)
+ *   "beforeTotals"  - after the items table, before the totals
  */
-export type NotesPosition = "bottom" | "beforeTotals";
+export type NotesPosition = 'bottom' | 'beforeTotals';
 
 /** Text alignment of the Notes block. */
-export type NotesAlign = "left" | "center" | "right";
+export type NotesAlign = 'left' | 'center' | 'right';
 
 /** Fields that can be toggled on/off. When off they hide on the invoice too. */
 export type ToggleField =
-  | "fromAddress"
-  | "fromEmail"
-  | "billToAddress"
-  | "billToEmail"
-  | "dueDate"
-  | "poNumber"
-  | "discount"
-  | "notes";
+  | 'fromAddress'
+  | 'fromEmail'
+  | 'billToAddress'
+  | 'billToEmail'
+  | 'dueDate'
+  | 'poNumber'
+  | 'discount'
+  | 'notes';
 
 export type Visibility = Record<ToggleField, boolean>;
 
 export type TemplateId =
-  | "modern"
-  | "minimal"
-  | "classic"
-  | "sidebar"
-  | "receipt"
-  | "letterhead";
+  | 'modern'
+  | 'minimal'
+  | 'classic'
+  | 'sidebar'
+  | 'receipt'
+  | 'letterhead'
+  | 'compact'
+  | 'bold'
+  | 'corporate';
 
-export type LogoPosition = "left" | "right" | "top" | "bottom";
+export type LogoPosition = 'left' | 'right' | 'top' | 'bottom';
 
 /**
  * Alignment of the invoice's header title/subtitle block. "auto" keeps each
  * template's built-in alignment; the others override it.
  */
-export type HeaderAlign = "auto" | "left" | "center" | "right";
+export type HeaderAlign = 'auto' | 'left' | 'center' | 'right';
 
 export type AccentId =
-  | "indigo"
-  | "emerald"
-  | "rose"
-  | "amber"
-  | "slate"
-  | "sky";
+  | 'indigo'
+  | 'emerald'
+  | 'rose'
+  | 'amber'
+  | 'slate'
+  | 'sky';
 
 /** Lifecycle status of a saved invoice, cycled Draft → Sent → Paid. */
-export type InvoiceStatus = "draft" | "sent" | "paid";
+export type InvoiceStatus = 'draft' | 'sent' | 'paid';
 
-export type Frequency = "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly";
+export type Frequency =
+  | 'weekly'
+  | 'biweekly'
+  | 'monthly'
+  | 'quarterly'
+  | 'yearly';
 
 export type Recurring = {
   enabled: boolean;
@@ -83,12 +91,7 @@ export type Watermark = {
   size: number;
 };
 
-export type WatermarkColor =
-  | "slate"
-  | "red"
-  | "green"
-  | "amber"
-  | "indigo";
+export type WatermarkColor = 'slate' | 'red' | 'green' | 'amber' | 'indigo';
 
 export type InvoiceData = {
   template: TemplateId;

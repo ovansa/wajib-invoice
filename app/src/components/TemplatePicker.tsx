@@ -65,15 +65,57 @@ function Thumb({ id }: { id: TemplateId }) {
       </div>
     );
   }
-  // letterhead
-  return (
-    <div className="flex h-full flex-col">
-      <div className="h-1/3 w-full rounded-t-sm bg-indigo-500" />
-      <div className="flex flex-1 flex-col gap-1 p-1.5">
-        <div className="h-1 w-1/2 rounded-full bg-slate-300" />
-        <div className="mt-auto h-1.5 w-full rounded-sm bg-slate-300" />
-        <div className="h-1 w-full rounded-full bg-slate-200" />
+  if (id === "letterhead") {
+    return (
+      <div className="flex h-full flex-col">
+        <div className="h-1/3 w-full rounded-t-sm bg-indigo-500" />
+        <div className="flex flex-1 flex-col gap-1 p-1.5">
+          <div className="h-1 w-1/2 rounded-full bg-slate-300" />
+          <div className="mt-auto h-1.5 w-full rounded-sm bg-slate-300" />
+          <div className="h-1 w-full rounded-full bg-slate-200" />
+        </div>
       </div>
+    );
+  }
+  if (id === "compact") {
+    return (
+      <div className="flex h-full flex-col gap-0.5 p-1.5">
+        <div className="flex justify-between border-b-2 border-indigo-500 pb-0.5">
+          <div className="h-1 w-1/3 rounded-full bg-slate-400" />
+          <div className="h-1 w-1/4 rounded-full bg-indigo-500" />
+        </div>
+        <div className="mt-0.5 h-1 w-full rounded-full bg-slate-200" />
+        <div className="h-1 w-full rounded-full bg-slate-200" />
+        <div className="h-1 w-full rounded-full bg-slate-200" />
+        <div className="mt-auto h-2 w-1/2 self-end rounded-sm bg-indigo-500" />
+      </div>
+    );
+  }
+  if (id === "bold") {
+    return (
+      <div className="flex h-full flex-col">
+        <div className="h-2/5 w-full rounded-t-sm bg-indigo-500 p-1">
+          <div className="h-1.5 w-1/2 rounded-full bg-white/80" />
+        </div>
+        <div className="flex flex-1 flex-col gap-1 p-1.5">
+          <div className="h-1 w-full rounded-full bg-slate-200" />
+          <div className="h-1 w-full rounded-full bg-slate-200" />
+          <div className="mt-auto h-2.5 w-3/5 self-end rounded-sm bg-indigo-500" />
+        </div>
+      </div>
+    );
+  }
+  // corporate
+  return (
+    <div className="flex h-full flex-col gap-1 p-1.5">
+      <div className="flex justify-between">
+        <div className="h-1 w-1/3 rounded-full bg-slate-500" />
+        <div className="h-1.5 w-1/4 rounded-full bg-slate-400" />
+      </div>
+      <div className="h-0.5 w-full bg-indigo-500" />
+      <div className="mt-0.5 h-1 w-full rounded-full bg-slate-200" />
+      <div className="h-1 w-full rounded-full bg-slate-200" />
+      <div className="mt-auto h-3 w-1/2 self-end rounded-sm border border-slate-300 bg-slate-50" />
     </div>
   );
 }

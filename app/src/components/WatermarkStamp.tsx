@@ -1,6 +1,7 @@
-import type { Watermark } from "../types";
-import { PAGE_WIDTH } from "../templates/page";
-import { watermarkCss, watermarkFontSize } from "../lib/watermark";
+import { watermarkCss, watermarkFontSize } from '../lib/watermark';
+
+import { PAGE_WIDTH } from '../templates/page';
+import type { Watermark } from '../types';
 
 type Props = {
   watermark: Watermark;
@@ -10,11 +11,14 @@ type Props = {
 
 /**
  * A single diagonal watermark stamp that fills its (page-sized) positioned
- * parent. Used as an overlay inside each preview sheet — one stamp per page.
+ * parent. Used as an overlay inside each preview sheet - one stamp per page.
  * It is inert (pointer-events: none) and does not affect layout/measurement,
  * so pagination is unchanged.
  */
-export default function WatermarkStamp({ watermark, width = PAGE_WIDTH }: Props) {
+export default function WatermarkStamp({
+  watermark,
+  width = PAGE_WIDTH,
+}: Props) {
   const text = watermark.text.trim();
   if (!text) return null;
 
@@ -22,19 +26,19 @@ export default function WatermarkStamp({ watermark, width = PAGE_WIDTH }: Props)
     <div
       aria-hidden
       data-watermark
-      className="pointer-events-none absolute inset-0 z-20 flex select-none items-center justify-center overflow-hidden"
+      className='pointer-events-none absolute inset-0 z-20 flex select-none items-center justify-center overflow-hidden'
     >
       <span
         style={{
-          transform: "rotate(-30deg)",
+          transform: 'rotate(-30deg)',
           color: watermarkCss(watermark.color),
           opacity: Math.max(0, Math.min(100, watermark.opacity)) / 100,
           fontSize: watermarkFontSize(text, width, watermark.size),
           fontWeight: 800,
-          letterSpacing: "0.08em",
+          letterSpacing: '0.08em',
           lineHeight: 1,
-          whiteSpace: "nowrap",
-          textTransform: "uppercase",
+          whiteSpace: 'nowrap',
+          textTransform: 'uppercase',
         }}
       >
         {text}

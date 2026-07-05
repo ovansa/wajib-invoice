@@ -1,15 +1,16 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-/* Self-hosted Poppins — bundled so it renders in the html2canvas PDF export */
-@import "@fontsource/poppins/300.css";
-@import "@fontsource/poppins/400.css";
-@import "@fontsource/poppins/500.css";
-@import "@fontsource/poppins/600.css";
-@import "@fontsource/poppins/700.css";
+/* Self-hosted Poppins - bundled so it renders in the html2canvas PDF export */
+@import '@fontsource/poppins/300.css';
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
 
 @theme {
-  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, sans-serif;
+  --font-sans:
+    'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
 }
 
 html,
@@ -21,18 +22,18 @@ body,
 body {
   background-color: #f1f3f6;
   -webkit-font-smoothing: antialiased;
-  /* Note: intentionally NOT `optimizeLegibility` — it enables kerning that
+  /* Note: intentionally NOT `optimizeLegibility` - it enables kerning that
      html2canvas mismeasures, merging adjacent words in the PDF export. */
   text-rendering: optimizeSpeed;
 }
 
 /* Hide number-input spinners for a cleaner look */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -42,7 +43,7 @@ input[type="number"] {
  * On screen the invoice is rendered twice: an off-screen continuous
  * "capture" copy (full, untransformed) and the paged on-screen sheets.
  * For printing we hide everything and bring the continuous capture copy
- * on-screen, then let the browser paginate it natively — this yields
+ * on-screen, then let the browser paginate it natively - this yields
  * real, selectable, vector text and crisp output at any DPI.
  * ------------------------------------------------------------------ */
 
@@ -51,7 +52,7 @@ input[type="number"] {
   position: absolute;
   left: -99999px;
   top: 0;
-  width: 820px; /* PAGE_WIDTH — keep in sync with templates/page.ts */
+  width: 820px; /* PAGE_WIDTH - keep in sync with templates/page.ts */
 }
 
 @media print {
@@ -89,7 +90,7 @@ input[type="number"] {
 
   /* The template pins a full-A4 min-height on its root for the on-screen sheet;
      drop it everywhere in print so a short invoice collapses to its natural
-     height (no blank trailing page). min-height is safe to zero broadly — it
+     height (no blank trailing page). min-height is safe to zero broadly - it
      never distorts layout, only removes the artificial floor. */
   .invoice-capture * {
     min-height: 0 !important;

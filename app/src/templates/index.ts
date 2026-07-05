@@ -6,6 +6,9 @@ import ClassicTemplate from "./ClassicTemplate";
 import SidebarTemplate from "./SidebarTemplate";
 import ReceiptTemplate from "./ReceiptTemplate";
 import LetterheadTemplate from "./LetterheadTemplate";
+import CompactTemplate from "./CompactTemplate";
+import BoldTemplate from "./BoldTemplate";
+import CorporateTemplate from "./CorporateTemplate";
 
 export type { TemplateId };
 
@@ -60,6 +63,24 @@ export const templates: TemplateMeta[] = [
     name: "Letterhead",
     description: "Full-width header band",
     Component: LetterheadTemplate,
+  },
+  {
+    id: "compact",
+    name: "Compact",
+    description: "Dense, fits more items",
+    Component: CompactTemplate,
+  },
+  {
+    id: "bold",
+    name: "Bold",
+    description: "Accent header, big total",
+    Component: BoldTemplate,
+  },
+  {
+    id: "corporate",
+    name: "Corporate",
+    description: "Formal, boxed totals",
+    Component: CorporateTemplate,
   },
 ];
 

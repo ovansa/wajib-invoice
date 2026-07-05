@@ -1,16 +1,17 @@
-import type { InvoiceData, ItemSection, LineItem } from "../types";
-import { initialData } from "./defaults";
-import { currencies } from "./currencies";
-import { uid } from "./format";
+import type { InvoiceData, ItemSection, LineItem } from '../types';
 
-const KEY = "invoice-generator:data:v1";
+import { currencies } from './currencies';
+import { initialData } from './defaults';
+import { uid } from './format';
+
+const KEY = 'invoice-generator:data:v1';
 
 /**
  * Resolve the sections list, migrating legacy invoices that stored a flat
  * `items` array into a single unnamed section. Also backfills item ids.
  */
 function resolveSections(
-  parsed: Partial<InvoiceData> & { items?: LineItem[] }
+  parsed: Partial<InvoiceData> & { items?: LineItem[] },
 ): ItemSection[] {
   const withIds = (items: LineItem[]): LineItem[] =>
     items.map((it) => ({ ...it, id: it.id || uid() }));
@@ -18,18 +19,18 @@ function resolveSections(
   if (Array.isArray(parsed.sections) && parsed.sections.length) {
     return parsed.sections.map((s) => ({
       id: s.id || uid(),
-      title: s.title ?? "",
+      title: s.title ?? '',
       pageBreakBefore: s.pageBreakBefore ?? false,
       items:
         Array.isArray(s.items) && s.items.length
           ? withIds(s.items)
-          : [{ id: uid(), description: "", quantity: 1, rate: 0 }],
+          : [{ id: uid(), description: '', quantity: 1, rate: 0 }],
     }));
   }
 
   // Legacy: a flat items array → one unnamed section.
   if (Array.isArray(parsed.items) && parsed.items.length) {
-    return [{ id: uid(), title: "", items: withIds(parsed.items) }];
+    return [{ id: uid(), title: '', items: withIds(parsed.items) }];
   }
 
   return initialData.sections;
@@ -49,9 +50,9 @@ function normalizeCurrency(value: string | undefined): string {
  * fields/toggles added since it was saved. Safe against `null`/garbage input.
  */
 export function hydrate(
-  raw: (Partial<InvoiceData> & { items?: LineItem[] }) | null | undefined
+  raw: (Partial<InvoiceData> & { items?: LineItem[] }) | null | undefined,
 ): InvoiceData {
-  if (!raw || typeof raw !== "object") return structuredClone(initialData);
+  if (!raw || typeof raw !== 'object') return structuredClone(initialData);
   const { items: _legacyItems, ...rest } = raw;
   return {
     ...initialData,
@@ -60,11 +61,11 @@ export function hydrate(
     // Only "beforeTotals" or "bottom" are valid; anything else (incl. a legacy
     // "section:<id>" from when per-section placement existed) → "bottom".
     notesPosition:
-      raw.notesPosition === "beforeTotals" ? "beforeTotals" : "bottom",
+      raw.notesPosition === 'beforeTotals' ? 'beforeTotals' : 'bottom',
     notesAlign:
-      raw.notesAlign === "center" || raw.notesAlign === "right"
+      raw.notesAlign === 'center' || raw.notesAlign === 'right'
         ? raw.notesAlign
-        : "left",
+        : 'left',
     visible: { ...initialData.visible, ...(raw.visible ?? {}) },
     watermark: { ...initialData.watermark, ...(raw.watermark ?? {}) },
     sections: resolveSections(raw),
@@ -85,7 +86,7 @@ export function saveData(data: InvoiceData): void {
   try {
     localStorage.setItem(KEY, JSON.stringify(data));
   } catch {
-    /* storage full or unavailable — ignore */
+    /* storage full or unavailable - ignore */
   }
 }
 
