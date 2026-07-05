@@ -43,7 +43,9 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-70">
               From
             </div>
-            <div className="mt-1 text-[15px] font-semibold">{data.from}</div>
+            <div className="mt-1 wrap-break-word text-[15px] font-semibold">
+              {data.from}
+            </div>
             {visible.fromEmail && data.fromEmail && (
               <div className="mt-0.5 text-[12px] opacity-80">
                 {data.fromEmail}
@@ -60,7 +62,9 @@ const SidebarTemplate = forwardRef<HTMLDivElement, TemplateProps>(
             <div className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-70">
               Bill To
             </div>
-            <div className="mt-1 text-[15px] font-semibold">{data.billTo}</div>
+            <div className="mt-1 wrap-break-word text-[15px] font-semibold">
+              {data.billTo}
+            </div>
             {visible.billToEmail && data.billToEmail && (
               <div className="mt-0.5 text-[12px] opacity-80">
                 {data.billToEmail}

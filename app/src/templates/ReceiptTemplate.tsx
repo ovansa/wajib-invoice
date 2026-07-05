@@ -90,13 +90,15 @@ const ReceiptTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
             {/* Meta rows */}
             <div className="space-y-1.5 border-b border-dashed border-slate-300 py-5 text-[12px]">
-              <div className="flex justify-between">
-                <span className="text-slate-400">From</span>
-                <span className="font-medium text-slate-900">{data.from}</span>
+              <div className="flex justify-between gap-4">
+                <span className="shrink-0 text-slate-400">From</span>
+                <span className="min-w-0 wrap-break-word text-right font-medium text-slate-900">
+                  {data.from}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Billed to</span>
-                <span className="font-medium text-slate-900">
+              <div className="flex justify-between gap-4">
+                <span className="shrink-0 text-slate-400">Billed to</span>
+                <span className="min-w-0 wrap-break-word text-right font-medium text-slate-900">
                   {data.billTo}
                 </span>
               </div>

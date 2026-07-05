@@ -67,11 +67,13 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
           {/* From / To / Dates */}
           <div className="mt-6 flex justify-between gap-8">
-            <div className="max-w-[48%]">
+            <div className="max-w-[48%] min-w-0">
               <div className="mb-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">
                 From
               </div>
-              <div className="font-bold text-slate-900">{data.from}</div>
+              <div className="wrap-break-word font-bold text-slate-900">
+                {data.from}
+              </div>
               {visible.fromEmail && data.fromEmail && (
                 <div className="mt-0.5 text-[12.5px] text-slate-600">
                   {data.fromEmail}
@@ -83,11 +85,13 @@ const ClassicTemplate = forwardRef<HTMLDivElement, TemplateProps>(
                 </div>
               )}
             </div>
-            <div className="max-w-[48%] text-right">
+            <div className="max-w-[48%] min-w-0 text-right">
               <div className="mb-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">
                 Bill To
               </div>
-              <div className="font-bold text-slate-900">{data.billTo}</div>
+              <div className="wrap-break-word font-bold text-slate-900">
+                {data.billTo}
+              </div>
               {visible.billToEmail && data.billToEmail && (
                 <div className="mt-0.5 text-[12.5px] text-slate-600">
                   {data.billToEmail}

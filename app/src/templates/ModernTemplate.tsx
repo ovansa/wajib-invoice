@@ -30,20 +30,20 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
         <div className="flex h-full flex-col px-16 pb-16 pt-12">
           {/* Header */}
           <div className="mb-12 flex items-start justify-between gap-8">
-            <div className="pt-1">
+            <div className="min-w-0 flex-1 pt-1">
               <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
                 From
               </div>
-              <div className="mt-1 text-[17px] font-semibold text-slate-900">
+              <div className="mt-1 wrap-break-word text-[17px] font-semibold text-slate-900">
                 {data.from || " "}
               </div>
               {visible.fromEmail && data.fromEmail && (
-                <div className="mt-0.5 text-[12.5px] text-slate-500">
+                <div className="mt-0.5 wrap-break-word text-[12.5px] text-slate-500">
                   {data.fromEmail}
                 </div>
               )}
               {visible.fromAddress && data.fromAddress && (
-                <div className="mt-1 whitespace-pre-wrap text-[12.5px] leading-5 text-slate-500">
+                <div className="mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500">
                   {data.fromAddress}
                 </div>
               )}
@@ -83,25 +83,25 @@ const ModernTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
           {/* Meta */}
           <div className="mb-6 flex items-start justify-between gap-8">
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
                 Bill To
               </div>
-              <div className="mt-1 text-[15px] font-semibold text-slate-900">
+              <div className="mt-1 wrap-break-word text-[15px] font-semibold text-slate-900">
                 {data.billTo}
               </div>
               {visible.billToEmail && data.billToEmail && (
-                <div className="mt-0.5 text-[12.5px] text-slate-500">
+                <div className="mt-0.5 wrap-break-word text-[12.5px] text-slate-500">
                   {data.billToEmail}
                 </div>
               )}
               {visible.billToAddress && data.billToAddress && (
-                <div className="mt-1 whitespace-pre-wrap text-[12.5px] leading-5 text-slate-500">
+                <div className="mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500">
                   {data.billToAddress}
                 </div>
               )}
             </div>
-            <div className="text-right">
+            <div className="shrink-0 text-right">
               <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400">
                 Date
               </div>

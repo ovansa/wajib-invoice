@@ -56,35 +56,43 @@ const MinimalTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
           {/* Parties + dates */}
           <div className="mb-16 grid grid-cols-3 gap-8 text-[12.5px]">
-            <div>
+            <div className="min-w-0">
               <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                 From
               </div>
-              <div className="font-medium text-slate-900">{data.from}</div>
+              <div className="wrap-break-word font-medium text-slate-900">
+                {data.from}
+              </div>
               {visible.fromEmail && data.fromEmail && (
-                <div className="mt-0.5 text-slate-500">{data.fromEmail}</div>
+                <div className="mt-0.5 wrap-break-word text-slate-500">
+                  {data.fromEmail}
+                </div>
               )}
               {visible.fromAddress && data.fromAddress && (
-                <div className="mt-1 whitespace-pre-wrap leading-5 text-slate-500">
+                <div className="mt-1 whitespace-pre-wrap wrap-break-word leading-5 text-slate-500">
                   {data.fromAddress}
                 </div>
               )}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                 To
               </div>
-              <div className="font-medium text-slate-900">{data.billTo}</div>
+              <div className="wrap-break-word font-medium text-slate-900">
+                {data.billTo}
+              </div>
               {visible.billToEmail && data.billToEmail && (
-                <div className="mt-0.5 text-slate-500">{data.billToEmail}</div>
+                <div className="mt-0.5 wrap-break-word text-slate-500">
+                  {data.billToEmail}
+                </div>
               )}
               {visible.billToAddress && data.billToAddress && (
-                <div className="mt-1 whitespace-pre-wrap leading-5 text-slate-500">
+                <div className="mt-1 whitespace-pre-wrap wrap-break-word leading-5 text-slate-500">
                   {data.billToAddress}
                 </div>
               )}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                 Issued
               </div>

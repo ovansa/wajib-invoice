@@ -29,33 +29,35 @@ const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
         <div className="flex h-full flex-col">
           {/* Full-width letterhead band */}
           <div
-            className="flex items-center justify-between px-14 py-9 text-white"
+            className="flex items-center justify-between gap-8 px-14 py-9 text-white"
             style={{ backgroundColor: accent.base }}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex min-w-0 flex-1 items-center gap-4">
               {data.logo && (
                 <img
                   src={data.logo}
                   alt="Logo"
-                  className="max-h-14 max-w-[120px] bg-white/95 object-contain p-1"
+                  className="max-h-14 max-w-[120px] shrink-0 bg-white/95 object-contain p-1"
                   style={{ borderRadius: 2 }}
                 />
               )}
-              <div>
-                <div className="text-[15px] font-semibold">{data.from}</div>
+              <div className="min-w-0">
+                <div className="wrap-break-word text-[15px] font-semibold">
+                  {data.from}
+                </div>
                 {visible.fromEmail && data.fromEmail && (
-                  <div className="text-[12px] opacity-85">
+                  <div className="wrap-break-word text-[12px] opacity-85">
                     {data.fromEmail}
                   </div>
                 )}
                 {visible.fromAddress && data.fromAddress && (
-                  <div className="whitespace-pre-wrap text-[11.5px] leading-5 opacity-85">
+                  <div className="whitespace-pre-wrap wrap-break-word text-[11.5px] leading-5 opacity-85">
                     {data.fromAddress}
                   </div>
                 )}
               </div>
             </div>
-            <div className={textAlignClass[headerAlign]}>
+            <div className={`shrink-0 ${textAlignClass[headerAlign]}`}>
               <div className="text-[30px] font-light leading-none tracking-[0.12em]">
                 {data.headerTitle || "INVOICE"}
               </div>
@@ -69,29 +71,29 @@ const LetterheadTemplate = forwardRef<HTMLDivElement, TemplateProps>(
 
           <div className="flex flex-1 flex-col px-14 py-10">
             {/* Bill to + dates */}
-            <div className="mb-8 flex items-start justify-between">
-              <div>
+            <div className="mb-8 flex items-start justify-between gap-8">
+              <div className="min-w-0 flex-1">
                 <div
                   className="text-[11px] font-semibold uppercase tracking-[0.15em]"
                   style={{ color: accent.dark }}
                 >
                   Bill To
                 </div>
-                <div className="mt-1 text-[15px] font-semibold text-slate-900">
+                <div className="mt-1 wrap-break-word text-[15px] font-semibold text-slate-900">
                   {data.billTo}
                 </div>
                 {visible.billToEmail && data.billToEmail && (
-                  <div className="mt-0.5 text-[12.5px] text-slate-500">
+                  <div className="mt-0.5 wrap-break-word text-[12.5px] text-slate-500">
                     {data.billToEmail}
                   </div>
                 )}
                 {visible.billToAddress && data.billToAddress && (
-                  <div className="mt-1 whitespace-pre-wrap text-[12.5px] leading-5 text-slate-500">
+                  <div className="mt-1 whitespace-pre-wrap wrap-break-word text-[12.5px] leading-5 text-slate-500">
                     {data.billToAddress}
                   </div>
                 )}
               </div>
-              <div className="text-right text-[12.5px]">
+              <div className="shrink-0 text-right text-[12.5px]">
                 {data.date && (
                   <div>
                     <span className="text-slate-400">Date: </span>
