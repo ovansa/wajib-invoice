@@ -202,6 +202,10 @@ export default function App() {
   // Signed-in user, or null when anonymous. Anonymous mode is fully functional
   // (localStorage only); auth is purely additive.
   const [user, setUser] = useState<AuthUser | null>(null);
+  // Whether the initial /me check has completed. Until it does we don't know if
+  // there's a session, so we render neither auth variant — avoids a flash of the
+  // Sign in / Sign up buttons on refresh for signed-in users.
+  const [authChecked, setAuthChecked] = useState(false);
   const [saveState, setSaveState] = useState<'saved' | 'saving'>('saved');
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -307,7 +311,9 @@ export default function App() {
     let cancelled = false;
     (async () => {
       const me = await fetchMe();
-      if (cancelled || !me) return;
+      if (cancelled) return;
+      setAuthChecked(true);
+      if (!me) return;
       setUser(me);
       mergeAfterAuth();
     })();
@@ -869,8 +875,15 @@ export default function App() {
 
             <div className='hidden h-5 w-px bg-slate-200 sm:block' />
 
-            {/* Account: signed in → avatar menu; anonymous → Sign in / Sign up */}
-            {user ? (
+            {/* Account: signed in → avatar menu; anonymous → Sign in / Sign up.
+                While the initial session check is pending, render a neutral
+                placeholder so signed-in users don't flash the auth buttons. */}
+            {!authChecked ? (
+              <div
+                aria-hidden
+                className='h-8 w-8 animate-pulse rounded-full bg-slate-100'
+              />
+            ) : user ? (
               <div className='relative'>
                 <button
                   onClick={() => setAccountMenuOpen((o) => !o)}
